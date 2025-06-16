@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasIVT - Calculateur IVT pour Professionnels de Santé</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Pop-up d'avertissement professionnel -->
+    <div id="professional-warning" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Avertissement Professionnel</h2>
+            </div>
+            <div class="modal-body">
+                <p>Ce site est destiné exclusivement aux professionnels de santé.</p>
+                <p>Confirmez-vous être un professionnel de santé ?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-professional" class="btn btn--primary">
+                    Je suis un professionnel de santé
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenu principal -->
+    <div id="main-content" class="main-content hidden">
+        <header class="header">
+            <div class="container">
+                <div class="flex items-center justify-between">
+                    <h1 class="logo">EasIVT</h1>
+                    <div class="header-controls">
+                        <select id="language-selector" class="form-control language-selector">
+                            <option value="fr">Français</option>
+                            <option value="en">English</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <div class="hero-section">
+                <h2 data-i18n="hero.title">Calculateur d'Injections Intravitréennes</h2>
+                <p data-i18n="hero.subtitle">Outil professionnel pour le calcul et la planification des IVT</p>
+            </div>
+
+            <!-- Calculateur principal -->
+            <section class="calculator-section">
+                <div class="card">
+                    <div class="card__header">
+                        <h3 data-i18n="calculator.title">Calculateur IVT</h3>
+                    </div>
+                    <div class="card__body">
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="calculator.pathology">Pathologie :</label>
+                            <select id="pathology" class="form-control">
+                                <option value="">Sélectionner une pathologie</option>
+                                <option value="dmla">DMLA humide</option>
+                                <option value="diabetic">Maculopathie diabétique</option>
+                                <option value="rvo">Occlusions veineuses</option>
+                                <option value="irvine_gass">Syndrome d'Irvine-Gass</option>
+                                <option value="uveitis">Uvéites</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="calculator.medication">Médicament :</label>
+                            <select id="medication" class="form-control">
+                                <option value="">Sélectionner un médicament</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="calculator.last_injection">Date de dernière injection :</label>
+                            <input type="date" id="last-injection-date" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="calculator.protocol">Protocole :</label>
+                            <select id="protocol" class="form-control">
+                                <option value="treat_extend">Treat & Extend</option>
+                                <option value="prn">PRN (Pro Re Nata)</option>
+                                <option value="monthly">Mensuel</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="calculator.interval">Intervalle (semaines) :</label>
+                            <input type="number" id="interval" class="form-control" min="4" max="16" value="4">
+                        </div>
+
+                        <button id="calculate-btn" class="btn btn--primary" data-i18n="calculator.calculate">
+                            Calculer prochaine injection
+                        </button>
+
+                        <div id="result" class="result-section hidden">
+                            <h4 data-i18n="calculator.result">Résultat :</h4>
+                            <div id="result-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Calculateur de délai entre injections -->
+            <section class="delay-calculator-section">
+                <div class="card">
+                    <div class="card__header">
+                        <h3 data-i18n="delay.title">Calculateur de délai entre injections</h3>
+                    </div>
+                    <div class="card__body">
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="delay.first_injection">Date première injection :</label>
+                            <input type="date" id="first-injection-date" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="delay.second_injection">Date deuxième injection :</label>
+                            <input type="date" id="second-injection-date" class="form-control">
+                        </div>
+
+                        <button id="calculate-delay-btn" class="btn btn--secondary" data-i18n="delay.calculate">
+                            Calculer le délai
+                        </button>
+
+                        <div id="delay-result" class="result-section hidden">
+                            <h4 data-i18n="delay.result">Délai :</h4>
+                            <div id="delay-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Informations sur les médicaments -->
+            <section class="medications-info">
+                <div class="card">
+                    <div class="card__header">
+                        <h3 data-i18n="medications.title">Base de données des médicaments</h3>
+                    </div>
+                    <div class="card__body">
+                        <div class="medication-categories">
+                            <div class="category">
+                                <h4 data-i18n="medications.anti_vegf">Anti-VEGF</h4>
+                                <div id="anti-vegf-list" class="medication-list"></div>
+                            </div>
+                            <div class="category">
+                                <h4 data-i18n="medications.corticoids">Corticoïdes</h4>
+                                <div id="corticoids-list" class="medication-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recommandations par pathologie -->
+            <section class="pathology-recommendations">
+                <div class="card">
+                    <div class="card__header">
+                        <h3 data-i18n="recommendations.title">Recommandations thérapeutiques</h3>
+                    </div>
+                    <div class="card__body">
+                        <div id="pathology-info" class="pathology-info"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Disclaimer -->
+            <section class="disclaimer">
+                <div class="card">
+                    <div class="card__header">
+                        <h3 data-i18n="disclaimer.title">Avertissement légal</h3>
+                    </div>
+                    <div class="card__body">
+                        <div class="disclaimer-content">
+                            <p data-i18n="disclaimer.content1">
+                                Ce site ne remplace pas le jugement clinique du médecin. Les recommandations 
+                                présentées sont indicatives et doivent être adaptées à chaque patient.
+                            </p>
+                            <p data-i18n="disclaimer.content2">
+                                L'utilisation de médicaments hors AMM (Autorisation de Mise sur le Marché) 
+                                relève de la responsabilité du prescripteur selon l'article L.5121-12-1 du CSP.
+                            </p>
+                            <p data-i18n="disclaimer.content3">
+                                Les intervalles d'injection doivent être ajustés selon la réponse thérapeutique 
+                                et l'état clinique du patient.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; 2025 EasIVT - Outil professionnel pour ophtalmologues</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

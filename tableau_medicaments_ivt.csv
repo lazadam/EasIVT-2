@@ -1,0 +1,9 @@
+Médicament,Molécule,Dosage,Type,Statut_AMM,Intervalle_Maximum,Protocole_Initial,Indications_Principales,Année_Approbation
+Lucentis,Ranibizumab,0.5mg,Anti-VEGF,AMM,12 semaines,3 mensuelles,"DMLA, OMD, OVCR",2007
+Eylea,Aflibercept,2mg,Anti-VEGF,AMM,16 semaines,3 mensuelles,"DMLA, OMD, OVCR",2012
+Eylea HD,Aflibercept,8mg,Anti-VEGF,AMM,16 semaines,3 mensuelles,"DMLA, OMD",2023
+Vabysmo,Faricimab,6mg,Anti-VEGF,AMM,16 semaines,4 mensuelles,"DMLA, OMD",2022
+Beovu,Brolucizumab,6mg,Anti-VEGF,AMM,12 semaines,3 mensuelles,DMLA,2019
+Avastin,Bevacizumab,1.25mg,Anti-VEGF,Hors AMM,8 semaines,4-6 semaines,"DMLA, OMD, OVCR",Non AMM
+Ozurdex,Dexaméthasone,0.7mg,Corticoïde,AMM,6 mois,Unique,"OMD, OVCR, Uvéites",2010
+Kénacort,Triamcinolone,4mg,Corticoïde,Hors AMM,4 mois,Unique,"OMD, Uvéites, Irvine-Gass",Non AMM
