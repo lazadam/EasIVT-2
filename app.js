@@ -590,3 +590,17 @@ function formatDate(date) {
         day: 'numeric'
     });
 }
+// src/App.js
+import React from 'react';
+import CalculateurIVT from './CalculateurIVT';
+
+function App() {
+  return (
+    <div className="App">
+      <h1>EasIVT</h1>
+      <CalculateurIVT />
+    </div>
+  );
+}
+
+export default App;
