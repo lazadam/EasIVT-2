@@ -590,3 +590,65 @@ function formatDate(date) {
         day: 'numeric'
     });
 }
+// 📆 Initialisation du générateur de schémas IVT
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('generate-dates-btn');
+  if (btn) {
+    btn.addEventListener('click', generateIVTPlan);
+  }
+});
+
+function generateIVTPlan() {
+  const startDateInput = document.getElementById('ivt-start-date');
+  const protocolSelect = document.getElementById('ivt-protocol');
+  const resultDiv = document.getElementById('ivt-dates-result');
+  const list = document.getElementById('ivt-dates-list');
+
+  const startDateStr = startDateInput.value;
+  const protocol = protocolSelect.value;
+
+  if (!startDateStr || !protocol) {
+    alert("Veuillez sélectionner une date et un protocole.");
+    return;
+  }
+
+  const start = new Date(startDateStr);
+  const dates = [];
+
+  if (protocol === "loading") {
+    // 3 injections à 30 jours d’intervalle
+    for (let i = 0; i < 3; i++) {
+      const next = new Date(start);
+      next.setDate(start.getDate() + i * 30);
+      dates.push(next);
+    }
+  }
+
+  if (protocol === "fixed") {
+    // Injections mensuelles pendant 6 mois
+    for (let i = 0; i < 6; i++) {
+      const next = new Date(start);
+      next.setMonth(start.getMonth() + i);
+      dates.push(next);
+    }
+  }
+
+  if (protocol === "te") {
+    // Traitement Treat & Extend (ex : +30j, +38j, +46j…)
+    for (let i = 0; i < 6; i++) {
+      const next = new Date(start);
+      next.setDate(start.getDate() + 30 + i * 8);
+      dates.push(next);
+    }
+  }
+
+  // Affichage
+  list.innerHTML = "";
+  dates.forEach(date => {
+    const li = document.createElement("li");
+    li.textContent = formatDate(date);
+    list.appendChild(li);
+  });
+
+  resultDiv.classList.remove("hidden");
+}
