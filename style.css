@@ -1032,6 +1032,28 @@ select.form-control {
   background: var(--color-border);
   border-radius: var(--radius-sm);
 }
+#ivt-scheduler-section {
+  margin-top: 2rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #f9f9f9;
+}
+
+#ivt-scheduler-section label {
+  display: block;
+  margin-top: 1rem;
+}
+
+#ivt-scheduler-section button {
+  margin-top: 1rem;
+}
+
+#ivt-dates-list {
+  list-style: disc;
+  margin-left: 2rem;
+}
+
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-text-secondary);
