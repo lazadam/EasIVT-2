@@ -47,11 +47,32 @@
                 <p data-i18n="hero.subtitle">Outil professionnel pour le calcul et la planification des IVT</p>
             </div>
 
-            <!-- Calculateur principal -->
+            <!-- Planificateur d'IVT -->
+            <section id="ivt-scheduler-section">
+  <h2>Planificateur d'injections (schéma complet)</h2>
+
+  <label for="ivt-start-date">Date de départ :</label>
+  <input type="date" id="ivt-start-date" />
+
+  <label for="ivt-protocol">Schéma thérapeutique :</label>
+  <select id="ivt-protocol">
+    <option value="loading">Loading Dose (3 injections mensuelles)</option>
+    <option value="te">Treat & Extend (6 injections)</option>
+    <option value="fixed">Mensuel fixe (6 mois)</option>
+  </select>
+
+  <button id="generate-dates-btn">Générer les dates</button>
+
+  <div id="ivt-dates-result" class="hidden">
+    <h3>Dates prévues :</h3>
+    <ul id="ivt-dates-list"></ul>
+  </div>
+</section>
+<!-- Aide à la décision -->
             <section class="calculator-section">
                 <div class="card">
                     <div class="card__header">
-                        <h3 data-i18n="calculator.title">Calculateur IVT</h3>
+                        <h3 data-i18n="calculator.title">Aide à la décision - En cours de fabrication</h3>
                     </div>
                     <div class="card__body">
                         <div class="form-group">
