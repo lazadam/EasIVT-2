@@ -108,7 +108,7 @@ const translations = {
   fr: {
     "hero.title": "Calculateur d'Injections Intravitréennes",
     "hero.subtitle": "Outil professionnel pour le calcul et la planification des IVT",
-    "calculator.title": "Calculateur IVT",
+    "Decision Support - Work in progress": "Aide à la décision - En cours de construction",
     "calculator.pathology": "Pathologie :",
     "calculator.medication": "Médicament :",
     "calculator.last_injection": "Date de dernière injection :",
