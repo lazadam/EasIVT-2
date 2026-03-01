@@ -79,17 +79,65 @@
                 </div>
 
                 <div class="grid-2-col">
+                    <!-- Quand seront mes prochains RDV ? -->
+                    <section class="calculator-section">
+                        <div class="card">
+                            <div class="card__header">
+                                <h3>Quand seront mes prochains RDV ?</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="form-group">
+                                    <label class="form-label">Date de dernière injection :</label>
+                                    <input type="date" id="next-rdv-last-date" class="form-control">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Intervalle (semaines) :</label>
+                                    <input type="number" id="next-rdv-interval" class="form-control" min="4" max="16" value="4">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Protocole de suivi :</label>
+                                    <select id="next-rdv-protocol" class="form-control">
+                                        <option value="monthly">Mensuel</option>
+                                        <option value="bimonthly">Bimestriel (q8S)</option>
+                                        <option value="te">Treat & Extend</option>
+                                        <option value="prn">PRN (Pro Re Nata)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Nombre de RDV à planifier :</label>
+                                    <input type="number" id="next-rdv-count" class="form-control" min="1" max="12" value="3">
+                                </div>
+
+                                <button id="calculate-rdv-btn" class="btn btn--primary btn--full-width">
+                                    Calculer mes prochains RDV
+                                </button>
+
+                                <div id="rdv-result" class="result-section hidden">
+                                    <h4>Calendrier des RDV</h4>
+                                    <div id="rdv-content"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
                     <!-- Calculateur de prochaine injection -->
                     <section class="calculator-section">
                         <div class="card">
                             <div class="card__header">
-                                <h3 data-i18n="calculator.title">Calculateur de prochaine injection</h3>
+                                <h3 data-i18n="calculator.title">Calculateur de prochaine injection (détaillé)</h3>
                             </div>
                             <div class="card__body">
+                                <p style="font-size:12px; color:var(--color-text-secondary); margin-bottom:16px;">
+                                    <em>Pathologie et médicament optionnels - pour affiner les recommandations</em>
+                                </p>
+
                                 <div class="form-group">
-                                    <label class="form-label" data-i18n="calculator.pathology">Pathologie :</label>
+                                    <label class="form-label" data-i18n="calculator.pathology">Pathologie (optionnel) :</label>
                                     <select id="pathology" class="form-control">
-                                        <option value="">Sélectionner une pathologie</option>
+                                        <option value="">-- Sélectionner une pathologie --</option>
                                         <option value="dmla">DMLA humide</option>
                                         <option value="diabetic">Maculopathie diabétique</option>
                                         <option value="rvo">Occlusions veineuses</option>
@@ -99,9 +147,9 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="form-label" data-i18n="calculator.medication">Médicament :</label>
+                                    <label class="form-label" data-i18n="calculator.medication">Médicament (optionnel) :</label>
                                     <select id="medication" class="form-control">
-                                        <option value="">Sélectionner un médicament</option>
+                                        <option value="">-- Sélectionner un médicament --</option>
                                     </select>
                                 </div>
 
@@ -164,13 +212,56 @@
                             </div>
                         </div>
 
-                        <!-- Recommandations par pathologie -->
+                        <!-- Recommandations par pathologie (cliquables) -->
                         <div class="card" style="margin-top: var(--space-24);">
                             <div class="card__header">
                                 <h3 data-i18n="recommendations.title">Recommandations thérapeutiques</h3>
                             </div>
                             <div class="card__body">
                                 <div id="pathology-info" class="pathology-info"></div>
+                            </div>
+                        </div>
+
+                        <!-- Ozurdex : cas spécial -->
+                        <div class="card" style="margin-top: var(--space-24);">
+                            <div class="card__header" style="background: rgba(var(--color-warning-rgb), 0.08);">
+                                <h3>Ozurdex - Gestion spécifique</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="form-group">
+                                    <label class="form-label"><strong>Contre-indications à vérifier :</strong></label>
+                                    <div style="display:grid; gap:8px;">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="ozurdex-sulcus"> Implant dans le sulcus
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="ozurdex-iris"> Fixé à l'iris ou à la sclère
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="ozurdex-ca"> Risque de passage en chambre antérieure
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="ozurdex-glaucoma"> Glaucome non contrôlé
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="ozurdex-phake"> Phaque (cristallin naturel)
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="ozurdex-info">
+                                    <p><strong>Suivi requis :</strong></p>
+                                    <ul style="margin:8px 0 0 16px;">
+                                        <li>Contrôle PIO : 7 à 15 jours après injection</li>
+                                        <li>Évaluation efficacité : M1 à M2</li>
+                                        <li>Délai minimum avant réinjection : M3 à M4</li>
+                                        <li>À 2 Ozurdex efficaces : évaluer passage à Iluvien (même jour ou +15j)</li>
+                                    </ul>
+                                </div>
+
+                                <button id="ozurdex-info-btn" class="btn btn--secondary btn--full-width" style="margin-top:16px;">
+                                    → Voir recommandations détaillées Ozurdex
+                                </button>
                             </div>
                         </div>
                     </section>
@@ -204,9 +295,10 @@
                         <div class="form-group">
                             <label class="form-label" data-i18n="scheduler.protocol">Schéma thérapeutique :</label>
                             <select id="ivt-protocol" class="form-control">
-                                <option value="loading">Loading Dose (3 injections mensuelles)</option>
-                                <option value="loading4">Loading Dose (4 injections mensuelles - Vabysmo)</option>
+                                <option value="loading">Dose de charge (3 injections mensuelles)</option>
+                                <option value="loading4">Dose de charge (4 injections mensuelles - Vabysmo)</option>
                                 <option value="te">Treat & Extend (extension progressive)</option>
+                                <option value="ozurdex_initial">Ozurdex - Schéma initial</option>
                                 <option value="fixed">Mensuel fixe (6 mois)</option>
                                 <option value="bimonthly">Bimestriel (q8 semaines)</option>
                             </select>
@@ -219,8 +311,19 @@
                             <input type="number" id="te-extension-step" class="form-control" min="1" max="4" value="2">
                             <label class="form-label mt-8" data-i18n="scheduler.max_interval">Intervalle maximum (semaines) :</label>
                             <input type="number" id="te-max-interval" class="form-control" min="8" max="16" value="12">
-                            <label class="form-label mt-8" data-i18n="scheduler.num_injections">Nombre d'injections :</label>
-                            <input type="number" id="te-num-injections" class="form-control" min="3" max="20" value="8">
+                            <small style="display:block; color:var(--color-text-secondary); margin-top:8px;">
+                                <em>Le T&E augmente automatiquement de palier à chaque injection selon la réponse.</em>
+                            </small>
+                        </div>
+
+                        <div class="form-group" id="ozurdex-params" style="display:none;">
+                            <label class="form-label"><strong>Schéma Ozurdex spécifique</strong></label>
+                            <p style="font-size:12px; color:var(--color-text-secondary); margin-bottom:12px;">
+                                Première injection suivie d'évaluation à M1-M2, réinjection possible à M3-M4 si efficace.
+                            </p>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="ozurdex-pio-check"> Contrôle PIO prévu à J7-J15
+                            </label>
                         </div>
 
                         <button id="generate-dates-btn" class="btn btn--primary btn--full-width" data-i18n="scheduler.generate">

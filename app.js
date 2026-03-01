@@ -352,6 +352,7 @@ function setupTabs() {
 function setupCalculator() {
   const pathologySelect = document.getElementById('pathology');
   const calculateBtn = document.getElementById('calculate-btn');
+  const calculateRdvBtn = document.getElementById('calculate-rdv-btn');
 
   if (pathologySelect) {
     pathologySelect.addEventListener('change', function () {
@@ -362,6 +363,20 @@ function setupCalculator() {
 
   if (calculateBtn) {
     calculateBtn.addEventListener('click', calculateNextInjection);
+  }
+
+  if (calculateRdvBtn) {
+    calculateRdvBtn.addEventListener('click', calculateNextRDV);
+  }
+
+  // Ozurdex info button
+  const ozurdexInfoBtn = document.getElementById('ozurdex-info-btn');
+  if (ozurdexInfoBtn) {
+    ozurdexInfoBtn.addEventListener('click', function () {
+      alert(currentLanguage === 'en'
+        ? 'Ozurdex recommendations:\n\n- Check contraindications before injection\n- Monitor IOP at 7-15 days\n- Evaluate efficacy at M1-M2\n- Wait at least M3-M4 before re-injection\n- After 2 effective Ozurdex: consider Iluvien passage (same day or +15 days)\n\nClick on a pathology in recommendations to see more details.'
+        : 'Recommandations Ozurdex:\n\n- Vérifier les contre-indications avant injection\n- Surveillance PIO à 7-15 jours\n- Évaluation efficacité à M1-M2\n- Attendre au moins M3-M4 avant réinjection\n- Après 2 Ozurdex efficaces: envisager passage à Iluvien (même jour ou +15j)\n\nCliquez sur une pathologie dans les recommandations pour plus de détails.');
+    });
   }
 }
 
@@ -402,10 +417,11 @@ function calculateNextInjection() {
   const medication = document.getElementById('medication').value;
   const pathology = document.getElementById('pathology').value;
 
-  if (!lastInjectionDate || !interval || !medication) {
+  // Pathologie et médicament ne sont plus obligatoires
+  if (!lastInjectionDate || !interval) {
     const msg = currentLanguage === 'en'
-      ? 'Please fill in all required fields.'
-      : 'Veuillez remplir tous les champs obligatoires.';
+      ? 'Please enter the last injection date and interval.'
+      : 'Veuillez saisir la date de dernière injection et l\'intervalle.';
     alert(msg);
     return;
   }
@@ -441,6 +457,101 @@ function calculateNextInjection() {
   resultHTML += '</div>';
 
   if (resultContent) resultContent.innerHTML = resultHTML;
+  if (resultDiv) resultDiv.classList.remove('hidden');
+}
+
+// =================== NEXT RDV CALCULATOR ===================
+function calculateNextRDV() {
+  const lastDate = document.getElementById('next-rdv-last-date').value;
+  const interval = parseInt(document.getElementById('next-rdv-interval').value);
+  const protocol = document.getElementById('next-rdv-protocol').value;
+  const count = parseInt(document.getElementById('next-rdv-count').value);
+
+  if (!lastDate || !interval || !count) {
+    alert(currentLanguage === 'en' ? 'Please fill in all fields.' : 'Veuillez remplir tous les champs.');
+    return;
+  }
+
+  const startDate = new Date(lastDate);
+  const rdvs = [];
+
+  // Calcul des RDV en fonction du protocole
+  let currentDate = new Date(startDate);
+  let currentInterval = interval;
+
+  for (let i = 0; i < count; i++) {
+    // Injection
+    rdvs.push({
+      type: 'injection',
+      date: new Date(currentDate),
+      interval: currentInterval
+    });
+
+    // Consultations associées (selon type de RDV)
+    if (protocol === 'monthly') {
+      // Mensuel : consultation 1 semaine avant l'injection
+      const consultDate = new Date(currentDate);
+      consultDate.setDate(consultDate.getDate() - 7);
+      rdvs.push({
+        type: 'consultation',
+        date: consultDate,
+        reason: currentLanguage === 'en' ? 'Pre-injection visit' : 'Visite pré-injection'
+      });
+    } else if (protocol === 'te') {
+      // T&E : consultation post-injection à 2-4 semaines pour évaluer
+      const postConsultDate = new Date(currentDate);
+      postConsultDate.setDate(postConsultDate.getDate() + 21); // 3 semaines après
+      rdvs.push({
+        type: 'consultation',
+        date: postConsultDate,
+        reason: currentLanguage === 'en' ? 'Efficacy evaluation' : 'Évaluation de l\'efficacité'
+      });
+      currentInterval = Math.min(currentInterval + 2, 16); // Extension de 2 semaines max 16
+    } else if (protocol === 'prn') {
+      // PRN : consultation avant chaque injection pour évaluer nécessité
+      const preConsultDate = new Date(currentDate);
+      preConsultDate.setDate(preConsultDate.getDate() - 7);
+      rdvs.push({
+        type: 'consultation',
+        date: preConsultDate,
+        reason: currentLanguage === 'en' ? 'Need evaluation (PRN)' : 'Évaluation du besoin (PRN)'
+      });
+    }
+
+    // Prochaine injection
+    currentDate.setDate(currentDate.getDate() + (currentInterval * 7));
+  }
+
+  // Tri par date
+  rdvs.sort((a, b) => a.date - b.date);
+
+  // Affichage
+  const resultDiv = document.getElementById('rdv-result');
+  const contentDiv = document.getElementById('rdv-content');
+
+  let html = '<div class="rdv-timeline">';
+  rdvs.forEach((rdv, idx) => {
+    const dateStr = formatDate(rdv.date);
+    if (rdv.type === 'injection') {
+      html += '<div class="rdv-item rdv-injection">'
+        + '<span class="rdv-icon">💉</span>'
+        + '<div class="rdv-details">'
+        + '<strong>' + (currentLanguage === 'en' ? 'Injection' : 'Injection') + '</strong><br>'
+        + '<span class="rdv-date">' + dateStr + '</span>'
+        + (rdv.interval ? '<br><span class="rdv-interval">Intervalle : ' + rdv.interval + 'S</span>' : '')
+        + '</div></div>';
+    } else {
+      html += '<div class="rdv-item rdv-consultation">'
+        + '<span class="rdv-icon">👁️</span>'
+        + '<div class="rdv-details">'
+        + '<strong>' + rdv.reason + '</strong><br>'
+        + '<span class="rdv-date">' + dateStr + '</span>'
+        + '</div></div>';
+    }
+  });
+  html += '</div>';
+
+  if (contentDiv) contentDiv.innerHTML = html;
   if (resultDiv) resultDiv.classList.remove('hidden');
 }
 
@@ -581,9 +692,120 @@ function renderPathologyRecommendations() {
       html += '</ul>';
     }
 
+    html += '<p style="font-size:11px; color:var(--color-text-secondary); margin-top:12px;"><em>'
+      + (currentLanguage === 'en' ? 'Click for more details →' : 'Cliquez pour plus de détails →')
+      + '</em></p>';
+
     div.innerHTML = html;
+    div.addEventListener('click', function () {
+      showPathologyDetails(key, pathology);
+    });
     pathologyInfo.appendChild(div);
   });
+}
+
+function showPathologyDetails(key, pathology) {
+  const isFr = currentLanguage === 'fr';
+  let details = '<h3>' + pathology.name + '</h3>';
+
+  // Protocole détaillé selon la pathologie
+  switch(key) {
+    case 'dmla':
+      details += '<h4>' + (isFr ? 'DMLA Humide' : 'Wet AMD') + '</h4>'
+        + '<p>' + (isFr
+          ? '<strong>Protocoles recommandés :</strong><br>'
+            + '• <strong>Treat & Extend :</strong> 3 injections mensuelles, puis extension progressive<br>'
+            + '• <strong>PRN :</strong> Selon réponse clinique et OCT<br><br>'
+            + '<strong>Médicaments :</strong> Lucentis, Eylea, Eylea HD, Vabysmo, Beovu en première ligne<br><br>'
+            + '<strong>Objectif :</strong> Rétine sèche, stabilisation de l\'AV'
+          : '<strong>Recommended protocols:</strong><br>'
+            + '• <strong>Treat & Extend:</strong> 3 monthly injections, then progressive extension<br>'
+            + '• <strong>PRN:</strong> According to clinical response and OCT<br><br>'
+            + '<strong>Medications:</strong> Lucentis, Eylea, Eylea HD, Vabysmo, Beovu first-line<br><br>'
+            + '<strong>Goal:</strong> Dry retina, VA stabilization')
+        + '</p>';
+      break;
+    case 'diabetic':
+      details += '<h4>' + (isFr ? 'Maculopathie Diabétique' : 'Diabetic Macular Edema') + '</h4>'
+        + '<p>' + (isFr
+          ? '<strong>Protocoles :</strong><br>'
+            + '• Anti-VEGF en première ligne (Eylea, Vabysmo, Lucentis)<br>'
+            + '• Corticoïdes (Ozurdex, Triamcinolone) en alternatives ou association<br>'
+            + '• Contrôle glycémique et tensionnel essentiel<br><br>'
+            + '<strong>Suivi OCT :</strong> Mensuel initialement, puis selon réponse<br>'
+            + '<strong>Objectif :</strong> Réduction de l\'épaisseur rétinienne centrale'
+          : '<strong>Protocols:</strong><br>'
+            + '• Anti-VEGF first-line (Eylea, Vabysmo, Lucentis)<br>'
+            + '• Corticosteroids (Ozurdex, Triamcinolone) as alternatives or adjuvant<br>'
+            + '• Glycemic and blood pressure control essential<br><br>'
+            + '<strong>OCT Follow-up:</strong> Monthly initially, then per response<br>'
+            + '<strong>Goal:</strong> CRT reduction')
+        + '</p>';
+      break;
+    case 'rvo':
+      details += '<h4>' + (isFr ? 'Occlusions Veineuses' : 'Retinal Vein Occlusions') + '</h4>'
+        + '<p>' + (isFr
+          ? '<strong>OVCR (occlusion branche) :</strong><br>'
+            + '• Traitement : Anti-VEGF ou corticoïdes<br>'
+            + '• Laser focal si exsudat menaçant la macula<br><br>'
+            + '<strong>OBVR (occlusion centrale) :</strong><br>'
+            + '• Anti-VEGF ou Ozurdex en première ligne<br>'
+            + '• Suivi ophtalmo régulier<br><br>'
+            + '<strong>Toutes molécules anti-VEGF autorisées pour OVR</strong>'
+          : '<strong>Branch RVO:</strong><br>'
+            + '• Treatment: Anti-VEGF or corticosteroids<br>'
+            + '• Focal laser if exudates threaten macula<br><br>'
+            + '<strong>Central RVO:</strong><br>'
+            + '• Anti-VEGF or Ozurdex first-line<br>'
+            + '• Regular ophthalmology follow-up<br><br>'
+            + '<strong>All anti-VEGF molecules authorized for RVO</strong>')
+        + '</p>';
+      break;
+    case 'irvine_gass':
+      details += '<h4>' + (isFr ? 'Syndrome d\'Irvine-Gass' : 'Irvine-Gass Syndrome') + '</h4>'
+        + '<p>' + (isFr
+          ? '<strong>Définition :</strong> Œdème maculaire post-opératoire après chirurgie intra-oculaire<br><br>'
+            + '<strong>Traitement :</strong><br>'
+            + '• Niveau 1 : AINS topiques (indométacine) + acétazolamide per os<br>'
+            + '• Niveau 2 : Triamcinolone intravitréenne (hors AMM)<br>'
+            + '• Niveau 3 : Ozurdex (implant dexaméthasone)<br>'
+            + '• Avis rétine si membrane épirétinienne tractionnelle<br><br>'
+            + '<strong>Suivi OCT régulier</strong>'
+          : '<strong>Definition:</strong> Post-operative macular edema after intraocular surgery<br><br>'
+            + '<strong>Treatment:</strong><br>'
+            + '• Level 1: Topical NSAIDs (indomethacin) + oral acetazolamide<br>'
+            + '• Level 2: Intravitreal triamcinolone (off-label)<br>'
+            + '• Level 3: Ozurdex (dexamethasone implant)<br>'
+            + '• Retina specialist opinion if traction ERM<br><br>'
+            + '<strong>Regular OCT follow-up</strong>')
+        + '</p>';
+      break;
+    case 'uveitis':
+      details += '<h4>' + (isFr ? 'Uvéites' : 'Uveitis') + '</h4>'
+        + '<p>' + (isFr
+          ? '<strong>Traitement de l\'œdème maculaire :</strong><br>'
+            + '• Ozurdex ou Triamcinolone en première intention<br>'
+            + '• Anti-VEGF si inflammation insuffisamment contrôlée<br>'
+            + '• Contrôle de l\'inflammation systémique (immunosuppresseurs)<br><br>'
+            + '<strong>Suivi :</strong> Clinique et OCT régulier<br>'
+            + '<strong>Importante :</strong> Traiter la cause sous-jacente'
+          : '<strong>Macular edema treatment:</strong><br>'
+            + '• Ozurdex or Triamcinolone first-line<br>'
+            + '• Anti-VEGF if inflammation not well controlled<br>'
+            + '• Systemic inflammation control (immunosuppressants)<br><br>'
+            + '<strong>Follow-up:</strong> Regular clinical exam and OCT<br>'
+            + '<strong>Important:</strong> Treat underlying cause')
+        + '</p>';
+      break;
+  }
+
+  details += '<div style="margin-top:20px; text-align:center;">'
+    + '<button onclick="closeModal()" class="btn btn--primary">'
+    + (isFr ? 'Fermer' : 'Close')
+    + '</button></div>';
+
+  // Créer un modal simplifié (alert pour MVP, sinon utiliser une vraie modal)
+  alert(details);
 }
 
 function highlightActivePathology(pathology) {
@@ -603,9 +825,9 @@ function setupScheduler() {
   if (protocolSelect) {
     protocolSelect.addEventListener('change', function () {
       const teParams = document.getElementById('te-params');
-      if (teParams) {
-        teParams.style.display = this.value === 'te' ? 'block' : 'none';
-      }
+      const ozurdexParams = document.getElementById('ozurdex-params');
+      if (teParams) teParams.style.display = this.value === 'te' ? 'block' : 'none';
+      if (ozurdexParams) ozurdexParams.style.display = this.value === 'ozurdex_initial' ? 'block' : 'none';
     });
   }
 
@@ -640,6 +862,7 @@ function generateIVTPlan() {
   const start = new Date(startDateStr);
   const dates = [];
   const intervals = [];
+  const notes = [];
 
   switch (protocol) {
     case 'loading':
@@ -648,6 +871,7 @@ function generateIVTPlan() {
         next.setDate(start.getDate() + i * 30);
         dates.push(next);
         intervals.push(i === 0 ? 0 : 4);
+        notes.push(i === 0 ? 'Début' : '1ère injection');
       }
       break;
 
@@ -657,6 +881,7 @@ function generateIVTPlan() {
         next.setDate(start.getDate() + i * 28);
         dates.push(next);
         intervals.push(i === 0 ? 0 : 4);
+        notes.push(i === 0 ? 'Début' : '1ère injection');
       }
       break;
 
@@ -664,7 +889,6 @@ function generateIVTPlan() {
       const initialInterval = parseInt(document.getElementById('te-initial-interval').value) || 6;
       const extensionStep = parseInt(document.getElementById('te-extension-step').value) || 2;
       const maxInterval = parseInt(document.getElementById('te-max-interval').value) || 12;
-      const numInjections = parseInt(document.getElementById('te-num-injections').value) || 8;
 
       // Loading dose (3 monthly)
       for (let i = 0; i < 3; i++) {
@@ -672,19 +896,68 @@ function generateIVTPlan() {
         next.setDate(start.getDate() + i * 28);
         dates.push(next);
         intervals.push(i === 0 ? 0 : 4);
+        notes.push(i === 0 ? 'Début (dose de charge)' : 'Dose de charge');
       }
 
-      // Extension phase
+      // Extension phase - afficher jusqu'à intervalle maximal
       let currentInterval = initialInterval;
       let lastDate = dates[dates.length - 1];
-      for (let i = 3; i < numInjections; i++) {
+      let extensionCount = 0;
+      while (currentInterval <= maxInterval && extensionCount < 8) {
         const next = new Date(lastDate);
         next.setDate(lastDate.getDate() + currentInterval * 7);
         dates.push(next);
         intervals.push(currentInterval);
+        notes.push('T&E q' + currentInterval + 'S');
         lastDate = next;
         currentInterval = Math.min(currentInterval + extensionStep, maxInterval);
+        extensionCount++;
       }
+      break;
+    }
+
+    case 'ozurdex_initial': {
+      // Ozurdex schéma spécial
+      const firstInjection = new Date(start);
+      dates.push(firstInjection);
+      intervals.push(0);
+      notes.push('Injection Ozurdex #1');
+
+      // Contrôle PIO 10 jours après
+      const pioCheck = new Date(start);
+      pioCheck.setDate(start.getDate() + 10);
+      dates.push(pioCheck);
+      intervals.push(0);
+      notes.push('Contrôle PIO');
+
+      // Évaluation efficacité M1-M2
+      const eval1 = new Date(start);
+      eval1.setMonth(start.getMonth() + 1);
+      dates.push(eval1);
+      intervals.push(0);
+      notes.push('Évaluation efficacité (M1)');
+
+      // Possibilité réinjection M3
+      const reinjection = new Date(start);
+      reinjection.setMonth(start.getMonth() + 3);
+      dates.push(reinjection);
+      intervals.push(0);
+      notes.push('Injection Ozurdex #2 (si efficace)');
+
+      // Contrôle PIO après 2e injection
+      const pioCheck2 = new Date(reinjection);
+      pioCheck2.setDate(reinjection.getDate() + 10);
+      dates.push(pioCheck2);
+      intervals.push(0);
+      notes.push('Contrôle PIO');
+
+      // Considérer Iluvien 15j après 2e Ozurdex (optionnel)
+      const iluvien = new Date(reinjection);
+      iluvien.setDate(reinjection.getDate() + 15);
+      dates.push(iluvien);
+      intervals.push(0);
+      notes.push('Possibilité Iluvien (si 2 Ozurdex efficaces)');
+
       break;
     }
 
@@ -694,6 +967,7 @@ function generateIVTPlan() {
         next.setMonth(start.getMonth() + i);
         dates.push(next);
         intervals.push(i === 0 ? 0 : 4);
+        notes.push(i === 0 ? 'Début' : 'Mensuel');
       }
       break;
 
@@ -703,6 +977,7 @@ function generateIVTPlan() {
         next.setDate(start.getDate() + i * 56);
         dates.push(next);
         intervals.push(i === 0 ? 0 : 8);
+        notes.push(i === 0 ? 'Début' : 'q8S');
       }
       break;
   }
@@ -717,10 +992,14 @@ function generateIVTPlan() {
     dates.forEach((date, index) => {
       const item = document.createElement('div');
       item.className = 'schedule-item';
+      const noteText = notes[index] || '';
       item.innerHTML = '<span class="schedule-item-number">' + (index + 1) + '</span>'
-        + '<span class="schedule-item-date">' + formatDate(date) + '</span>'
+        + '<div style="flex:1;">'
+        + '<span class="schedule-item-date">' + formatDateShort(date) + '</span>'
+        + (noteText ? '<span class="schedule-item-note">' + noteText + '</span>' : '')
+        + '</div>'
         + '<span class="schedule-item-info">'
-        + (intervals[index] > 0 ? 'q' + intervals[index] + 'S' : (currentLanguage === 'en' ? 'Start' : 'Début'))
+        + (intervals[index] > 0 ? 'q' + intervals[index] + 'S' : '')
         + '</span>';
       listDiv.appendChild(item);
     });
@@ -729,10 +1008,20 @@ function generateIVTPlan() {
   if (summaryDiv && dates.length > 1) {
     const totalDays = Math.ceil((dates[dates.length - 1] - dates[0]) / (1000 * 60 * 60 * 24));
     const totalWeeks = Math.floor(totalDays / 7);
+    let medText = selectedMed ? ' (' + selectedMed + ')' : '';
+    let protocolText = '';
+    switch(protocol) {
+      case 'loading': protocolText = ' - Dose de charge (3)'; break;
+      case 'loading4': protocolText = ' - Dose de charge (4)'; break;
+      case 'te': protocolText = ' - Treat & Extend'; break;
+      case 'ozurdex_initial': protocolText = ' - Ozurdex'; break;
+      case 'fixed': protocolText = ' - Mensuel'; break;
+      case 'bimonthly': protocolText = ' - Bimestriel'; break;
+    }
     summaryDiv.innerHTML = '<strong>' + (currentLanguage === 'en' ? 'Summary: ' : 'Résumé : ') + '</strong>'
-      + dates.length + (currentLanguage === 'en' ? ' injections over ' : ' injections sur ')
+      + dates.length + (currentLanguage === 'en' ? ' appointments over ' : ' rendez-vous sur ')
       + totalWeeks + (currentLanguage === 'en' ? ' weeks' : ' semaines')
-      + (selectedMed ? ' (' + selectedMed + ')' : '');
+      + protocolText + medText;
   }
 
   if (resultDiv) resultDiv.classList.remove('hidden');
