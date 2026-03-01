@@ -273,6 +273,10 @@ let currentLanguage = 'fr';
 // =================== OCT DATA STORE ===================
 let octVisits = [];
 
+// =================== PATIENTS DATA STORE ===================
+let patients = [];
+let currentPatientId = null;
+
 // =================== INITIALISATION ===================
 document.addEventListener('DOMContentLoaded', function () {
   initializeApp();
@@ -321,6 +325,10 @@ function initializeApp() {
 
   // Charger les visites OCT depuis localStorage
   loadOCTVisits();
+
+  // Patients management
+  setupPatientsTab();
+  loadPatients();
 }
 
 // =================== TABS ===================
@@ -1791,6 +1799,231 @@ function updatePathologySelectOptions() {
 
   pathologySelect.value = currentValue;
   if (currentValue) updateMedicationOptions(currentValue);
+}
+
+// =================== PATIENTS MANAGEMENT ===================
+function setupPatientsTab() {
+  const newPatientBtn = document.getElementById('new-patient-btn');
+  const exportBtn = document.getElementById('export-patients-btn');
+  const importBtn = document.getElementById('import-patients-btn');
+  const importFileInput = document.getElementById('import-file-input');
+  const savePatientBtn = document.getElementById('save-patient-btn');
+  const deletePatientBtn = document.getElementById('delete-patient-btn');
+
+  if (newPatientBtn) newPatientBtn.addEventListener('click', createNewPatient);
+  if (exportBtn) exportBtn.addEventListener('click', exportPatients);
+  if (importBtn) importBtn.addEventListener('click', () => importFileInput.click());
+  if (importFileInput) importFileInput.addEventListener('change', importPatients);
+  if (savePatientBtn) savePatientBtn.addEventListener('click', saveCurrentPatient);
+  if (deletePatientBtn) deletePatientBtn.addEventListener('click', deleteCurrentPatient);
+
+  // Auto-save on field change
+  const patientFields = document.querySelectorAll('.patient-field');
+  patientFields.forEach(field => {
+    field.addEventListener('change', saveCurrentPatient);
+  });
+}
+
+function createNewPatient() {
+  const firstName = prompt(currentLanguage === 'en' ? 'First name:' : 'Prénom :');
+  if (!firstName) return;
+  const lastName = prompt(currentLanguage === 'en' ? 'Last name:' : 'Nom :');
+  if (!lastName) return;
+  const dob = prompt(currentLanguage === 'en' ? 'Date of birth (YYYY-MM-DD):' : 'Date de naissance (YYYY-MM-DD) :');
+
+  const patient = {
+    id: Date.now().toString(),
+    firstName: firstName,
+    lastName: lastName,
+    dob: dob || '',
+    av_od: '', av_os: '', av_bi: '',
+    refr_od: '', refr_os: '',
+    pio_od: '', pio_os: '',
+    antecedents: '', antecedents_ophtalmologiques: '',
+    allergies: '', notes: '',
+    visits: [],
+    createdAt: new Date().toISOString()
+  };
+
+  patients.push(patient);
+  savePatients();
+  renderPatientsList();
+  selectPatient(patient.id);
+}
+
+function selectPatient(patientId) {
+  currentPatientId = patientId;
+  renderPatientsList();
+  loadPatientFile(patientId);
+}
+
+function renderPatientsList() {
+  const list = document.getElementById('patients-list');
+  if (!list) return;
+
+  if (patients.length === 0) {
+    list.innerHTML = '<div class="patients-empty"><p>Aucun patient enregistré</p></div>';
+    const fileSection = document.getElementById('patient-file-section');
+    if (fileSection) fileSection.style.display = 'none';
+    return;
+  }
+
+  list.innerHTML = '';
+  patients.forEach(patient => {
+    const item = document.createElement('div');
+    item.className = 'patient-item' + (patient.id === currentPatientId ? ' active' : '');
+    item.innerHTML = '<div class="patient-item-name">' + patient.firstName + ' ' + patient.lastName + '</div>'
+      + '<div class="patient-item-info">'
+      + 'Né(e) : ' + (patient.dob || 'Non renseigné')
+      + '</div>';
+    item.addEventListener('click', () => selectPatient(patient.id));
+    list.appendChild(item);
+  });
+}
+
+function loadPatientFile(patientId) {
+  const patient = patients.find(p => p.id === patientId);
+  if (!patient) return;
+
+  const fileSection = document.getElementById('patient-file-section');
+  const nameSpan = document.getElementById('patient-file-name');
+  const idText = document.getElementById('patient-id-text');
+
+  if (fileSection) fileSection.style.display = 'block';
+  if (nameSpan) nameSpan.textContent = patient.firstName + ' ' + patient.lastName;
+  if (idText) idText.textContent = 'ID : ' + patientId + ' | Créé le : ' + new Date(patient.createdAt).toLocaleDateString(currentLanguage === 'en' ? 'en-US' : 'fr-FR');
+
+  // Load patient data into form
+  const fields = document.querySelectorAll('.patient-field');
+  fields.forEach(field => {
+    const fieldName = field.getAttribute('data-field');
+    field.value = patient[fieldName] || '';
+  });
+
+  // Load visits
+  renderPatientVisits(patient.visits);
+}
+
+function renderPatientVisits(visits) {
+  const listContainer = document.getElementById('patient-visits-list');
+  const emptyDiv = document.getElementById('patient-visits-empty');
+  const contentDiv = document.getElementById('patient-visits-content');
+
+  if (!visits || visits.length === 0) {
+    if (listContainer) listContainer.style.display = 'none';
+    if (emptyDiv) emptyDiv.style.display = 'block';
+    return;
+  }
+
+  if (listContainer) listContainer.style.display = 'block';
+  if (emptyDiv) emptyDiv.style.display = 'none';
+
+  if (!contentDiv) return;
+  contentDiv.innerHTML = '';
+
+  visits.forEach(visit => {
+    const visitEl = document.createElement('div');
+    visitEl.className = 'visit-item-mini';
+    visitEl.innerHTML = '<strong>' + formatDateShort(new Date(visit.date)) + '</strong>'
+      + 'AV: ' + (visit.av || '-') + ' | CRT: ' + (visit.crt || '-') + ' µm';
+    contentDiv.appendChild(visitEl);
+  });
+}
+
+function saveCurrentPatient() {
+  if (!currentPatientId) return;
+
+  const patient = patients.find(p => p.id === currentPatientId);
+  if (!patient) return;
+
+  const fields = document.querySelectorAll('.patient-field');
+  fields.forEach(field => {
+    const fieldName = field.getAttribute('data-field');
+    patient[fieldName] = field.value;
+  });
+
+  savePatients();
+}
+
+function deleteCurrentPatient() {
+  if (!currentPatientId) return;
+
+  if (!confirm(currentLanguage === 'en' ? 'Delete this patient and all their data?' : 'Supprimer ce patient et toutes ses données ?')) {
+    return;
+  }
+
+  patients = patients.filter(p => p.id !== currentPatientId);
+  currentPatientId = null;
+  savePatients();
+  renderPatientsList();
+
+  const fileSection = document.getElementById('patient-file-section');
+  if (fileSection) fileSection.style.display = 'none';
+}
+
+function savePatients() {
+  try {
+    localStorage.setItem('easivt_patients', JSON.stringify(patients));
+  } catch (e) {
+    console.error('Could not save patients:', e);
+  }
+}
+
+function loadPatients() {
+  try {
+    const saved = localStorage.getItem('easivt_patients');
+    if (saved) {
+      patients = JSON.parse(saved);
+      renderPatientsList();
+    }
+  } catch (e) {
+    patients = [];
+  }
+}
+
+function exportPatients() {
+  const data = {
+    patients: patients,
+    oct_visits: octVisits,
+    exportDate: new Date().toISOString()
+  };
+
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'easivt_backup_' + new Date().toISOString().split('T')[0] + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function importPatients(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.patients) {
+        patients = data.patients;
+        savePatients();
+        renderPatientsList();
+      }
+      if (data.oct_visits) {
+        octVisits = data.oct_visits;
+        saveOCTVisits();
+      }
+      alert(currentLanguage === 'en' ? 'Data imported successfully' : 'Données importées avec succès');
+    } catch (err) {
+      alert(currentLanguage === 'en' ? 'Error importing data' : 'Erreur lors de l\'import');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
 }
 
 // =================== HELPERS ===================

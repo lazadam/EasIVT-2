@@ -1539,6 +1539,96 @@ select.form-control {
   color: var(--color-info);
 }
 
+/* =================== PATIENTS MANAGEMENT =================== */
+.patients-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  min-height: 200px;
+}
+
+.patients-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.patient-item {
+  padding: var(--space-12);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  cursor: pointer;
+  transition: all var(--duration-fast);
+  background: var(--color-surface);
+}
+
+.patient-item:hover {
+  border-color: var(--color-primary);
+  background: rgba(var(--color-primary-rgb), 0.03);
+  box-shadow: var(--shadow-sm);
+}
+
+.patient-item.active {
+  border-color: var(--color-primary);
+  background: rgba(var(--color-primary-rgb), 0.08);
+  font-weight: var(--font-weight-semibold);
+}
+
+.patient-item-name {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin-bottom: var(--space-2);
+}
+
+.patient-item-info {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.patient-fieldset {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  padding: var(--space-12);
+  margin-bottom: var(--space-16);
+}
+
+.patient-fieldset legend {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  padding: 0 var(--space-6);
+}
+
+.patient-empty-state {
+  text-align: center;
+  padding: var(--space-16);
+}
+
+.visits-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.visit-item-mini {
+  padding: var(--space-8);
+  border-left: 3px solid var(--color-primary);
+  background: rgba(var(--color-primary-rgb), 0.03);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.visit-item-mini strong {
+  display: block;
+  color: var(--color-text);
+  margin-bottom: var(--space-2);
+}
+
 /* =================== DISCLAIMER =================== */
 .disclaimer {
   margin-top: var(--space-32);
