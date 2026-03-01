@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EasIVT - Calculateur IVT pour Professionnels de Santé</title>
+    <title>EasIVT - Calculateur IVT & Analyseur OCT</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,10 +15,11 @@
             </div>
             <div class="modal-body">
                 <p>Ce site est destiné exclusivement aux professionnels de santé.</p>
+                <p>Les outils présentés sont à visée d'aide à la décision et ne remplacent en aucun cas le jugement clinique.</p>
                 <p>Confirmez-vous être un professionnel de santé ?</p>
             </div>
             <div class="modal-footer">
-                <button id="confirm-professional" class="btn btn--primary">
+                <button id="confirm-professional" class="btn btn--primary btn--lg">
                     Je suis un professionnel de santé
                 </button>
             </div>
@@ -30,7 +31,10 @@
         <header class="header">
             <div class="container">
                 <div class="flex items-center justify-between">
-                    <h1 class="logo">EasIVT</h1>
+                    <div class="flex items-center gap-8">
+                        <h1 class="logo">EasIVT</h1>
+                        <span class="version-badge">v1.0</span>
+                    </div>
                     <div class="header-controls">
                         <select id="language-selector" class="form-control language-selector">
                             <option value="fr">Français</option>
@@ -41,153 +45,453 @@
             </div>
         </header>
 
-        <main class="container">
-            <div class="hero-section">
-                <h2 data-i18n="hero.title">Calculateur d'Injections Intravitréennes</h2>
-                <p data-i18n="hero.subtitle">Outil professionnel pour le calcul et la planification des IVT</p>
+        <!-- Navigation par onglets -->
+        <nav class="tab-navigation">
+            <div class="container">
+                <div class="tab-list" role="tablist">
+                    <button class="tab-btn active" data-tab="calculator" role="tab" aria-selected="true">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
+                        <span data-i18n="nav.calculator">Calculateur IVT</span>
+                    </button>
+                    <button class="tab-btn" data-tab="scheduler" role="tab" aria-selected="false">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        <span data-i18n="nav.scheduler">Planificateur</span>
+                    </button>
+                    <button class="tab-btn" data-tab="oct-analyzer" role="tab" aria-selected="false">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                        <span data-i18n="nav.oct">Analyseur OCT</span>
+                        <span class="beta-badge">BETA</span>
+                    </button>
+                    <button class="tab-btn" data-tab="medications" role="tab" aria-selected="false">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3"/></svg>
+                        <span data-i18n="nav.medications">Médicaments</span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <main class="container main-container">
+            <!-- ================= TAB: CALCULATEUR IVT ================= -->
+            <div id="tab-calculator" class="tab-panel active" role="tabpanel">
+                <div class="hero-section">
+                    <h2 data-i18n="hero.title">Calculateur d'Injections Intravitréennes</h2>
+                    <p data-i18n="hero.subtitle">Outil professionnel pour le calcul et la planification des IVT</p>
+                </div>
+
+                <div class="grid-2-col">
+                    <!-- Calculateur de prochaine injection -->
+                    <section class="calculator-section">
+                        <div class="card">
+                            <div class="card__header">
+                                <h3 data-i18n="calculator.title">Calculateur de prochaine injection</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="calculator.pathology">Pathologie :</label>
+                                    <select id="pathology" class="form-control">
+                                        <option value="">Sélectionner une pathologie</option>
+                                        <option value="dmla">DMLA humide</option>
+                                        <option value="diabetic">Maculopathie diabétique</option>
+                                        <option value="rvo">Occlusions veineuses</option>
+                                        <option value="irvine_gass">Syndrome d'Irvine-Gass</option>
+                                        <option value="uveitis">Uvéites</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="calculator.medication">Médicament :</label>
+                                    <select id="medication" class="form-control">
+                                        <option value="">Sélectionner un médicament</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="calculator.last_injection">Date de dernière injection :</label>
+                                    <input type="date" id="last-injection-date" class="form-control">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="calculator.protocol">Protocole :</label>
+                                    <select id="protocol" class="form-control">
+                                        <option value="treat_extend">Treat & Extend</option>
+                                        <option value="prn">PRN (Pro Re Nata)</option>
+                                        <option value="monthly">Mensuel</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="calculator.interval">Intervalle (semaines) :</label>
+                                    <input type="number" id="interval" class="form-control" min="4" max="16" value="4">
+                                </div>
+
+                                <button id="calculate-btn" class="btn btn--primary btn--full-width" data-i18n="calculator.calculate">
+                                    Calculer prochaine injection
+                                </button>
+
+                                <div id="result" class="result-section hidden">
+                                    <h4 data-i18n="calculator.result">Résultat :</h4>
+                                    <div id="result-content"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Calculateur de délai -->
+                    <section class="delay-calculator-section">
+                        <div class="card">
+                            <div class="card__header">
+                                <h3 data-i18n="delay.title">Calculateur de délai entre injections</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="delay.first_injection">Date première injection :</label>
+                                    <input type="date" id="first-injection-date" class="form-control">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="delay.second_injection">Date deuxième injection :</label>
+                                    <input type="date" id="second-injection-date" class="form-control">
+                                </div>
+
+                                <button id="calculate-delay-btn" class="btn btn--secondary btn--full-width" data-i18n="delay.calculate">
+                                    Calculer le délai
+                                </button>
+
+                                <div id="delay-result" class="result-section hidden">
+                                    <h4 data-i18n="delay.result">Délai :</h4>
+                                    <div id="delay-content"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recommandations par pathologie -->
+                        <div class="card" style="margin-top: var(--space-24);">
+                            <div class="card__header">
+                                <h3 data-i18n="recommendations.title">Recommandations thérapeutiques</h3>
+                            </div>
+                            <div class="card__body">
+                                <div id="pathology-info" class="pathology-info"></div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </div>
 
-            <!-- Planificateur d'IVT -->
-            <section id="ivt-scheduler-section">
-  <h2>Planificateur d'injections (schéma complet)</h2>
+            <!-- ================= TAB: PLANIFICATEUR ================= -->
+            <div id="tab-scheduler" class="tab-panel" role="tabpanel">
+                <div class="hero-section">
+                    <h2 data-i18n="scheduler.title">Planificateur d'injections</h2>
+                    <p data-i18n="scheduler.subtitle">Générez un schéma complet d'injections selon le protocole choisi</p>
+                </div>
 
-  <label for="ivt-start-date">Date de départ :</label>
-  <input type="date" id="ivt-start-date" />
-
-  <label for="ivt-protocol">Schéma thérapeutique :</label>
-  <select id="ivt-protocol">
-    <option value="loading">Loading Dose (3 injections mensuelles)</option>
-    <option value="te">Treat & Extend (6 injections)</option>
-    <option value="fixed">Mensuel fixe (6 mois)</option>
-  </select>
-
-  <button id="generate-dates-btn">Générer les dates</button>
-
-  <div id="ivt-dates-result" class="hidden">
-    <h3>Dates prévues :</h3>
-    <ul id="ivt-dates-list"></ul>
-  </div>
-</section>
-<!-- Aide à la décision -->
-            <section class="calculator-section">
-                <div class="card">
+                <div class="card" style="max-width: 700px; margin: 0 auto;">
                     <div class="card__header">
-                        <h3 data-i18n="calculator.title">Aide à la décision - En cours de fabrication</h3>
+                        <h3 data-i18n="scheduler.form_title">Paramètres du schéma thérapeutique</h3>
                     </div>
                     <div class="card__body">
                         <div class="form-group">
-                            <label class="form-label" data-i18n="calculator.pathology">Pathologie :</label>
-                            <select id="pathology" class="form-control">
-                                <option value="">Sélectionner une pathologie</option>
-                                <option value="dmla">DMLA humide</option>
-                                <option value="diabetic">Maculopathie diabétique</option>
-                                <option value="rvo">Occlusions veineuses</option>
-                                <option value="irvine_gass">Syndrome d'Irvine-Gass</option>
-                                <option value="uveitis">Uvéites</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" data-i18n="calculator.medication">Médicament :</label>
-                            <select id="medication" class="form-control">
+                            <label class="form-label" data-i18n="scheduler.medication">Médicament :</label>
+                            <select id="scheduler-medication" class="form-control">
                                 <option value="">Sélectionner un médicament</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" data-i18n="calculator.last_injection">Date de dernière injection :</label>
-                            <input type="date" id="last-injection-date" class="form-control">
+                            <label class="form-label" data-i18n="scheduler.start_date">Date de départ :</label>
+                            <input type="date" id="ivt-start-date" class="form-control">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label" data-i18n="calculator.protocol">Protocole :</label>
-                            <select id="protocol" class="form-control">
-                                <option value="treat_extend">Treat & Extend</option>
-                                <option value="prn">PRN (Pro Re Nata)</option>
-                                <option value="monthly">Mensuel</option>
+                            <label class="form-label" data-i18n="scheduler.protocol">Schéma thérapeutique :</label>
+                            <select id="ivt-protocol" class="form-control">
+                                <option value="loading">Loading Dose (3 injections mensuelles)</option>
+                                <option value="loading4">Loading Dose (4 injections mensuelles - Vabysmo)</option>
+                                <option value="te">Treat & Extend (extension progressive)</option>
+                                <option value="fixed">Mensuel fixe (6 mois)</option>
+                                <option value="bimonthly">Bimestriel (q8 semaines)</option>
                             </select>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label" data-i18n="calculator.interval">Intervalle (semaines) :</label>
-                            <input type="number" id="interval" class="form-control" min="4" max="16" value="4">
+                        <div class="form-group" id="te-params" style="display:none;">
+                            <label class="form-label" data-i18n="scheduler.initial_interval">Intervalle initial (semaines) :</label>
+                            <input type="number" id="te-initial-interval" class="form-control" min="4" max="8" value="6">
+                            <label class="form-label mt-8" data-i18n="scheduler.extension_step">Palier d'extension (semaines) :</label>
+                            <input type="number" id="te-extension-step" class="form-control" min="1" max="4" value="2">
+                            <label class="form-label mt-8" data-i18n="scheduler.max_interval">Intervalle maximum (semaines) :</label>
+                            <input type="number" id="te-max-interval" class="form-control" min="8" max="16" value="12">
+                            <label class="form-label mt-8" data-i18n="scheduler.num_injections">Nombre d'injections :</label>
+                            <input type="number" id="te-num-injections" class="form-control" min="3" max="20" value="8">
                         </div>
 
-                        <button id="calculate-btn" class="btn btn--primary" data-i18n="calculator.calculate">
-                            Calculer prochaine injection
+                        <button id="generate-dates-btn" class="btn btn--primary btn--full-width" data-i18n="scheduler.generate">
+                            Générer les dates
                         </button>
 
-                        <div id="result" class="result-section hidden">
-                            <h4 data-i18n="calculator.result">Résultat :</h4>
-                            <div id="result-content"></div>
+                        <div id="ivt-dates-result" class="hidden" style="margin-top: var(--space-24);">
+                            <h4 data-i18n="scheduler.planned_dates">Dates prévues :</h4>
+                            <div id="ivt-dates-list" class="schedule-list"></div>
+                            <div class="schedule-summary" id="schedule-summary"></div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- Calculateur de délai entre injections -->
-            <section class="delay-calculator-section">
-                <div class="card">
-                    <div class="card__header">
-                        <h3 data-i18n="delay.title">Calculateur de délai entre injections</h3>
-                    </div>
-                    <div class="card__body">
-                        <div class="form-group">
-                            <label class="form-label" data-i18n="delay.first_injection">Date première injection :</label>
-                            <input type="date" id="first-injection-date" class="form-control">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" data-i18n="delay.second_injection">Date deuxième injection :</label>
-                            <input type="date" id="second-injection-date" class="form-control">
-                        </div>
-
-                        <button id="calculate-delay-btn" class="btn btn--secondary" data-i18n="delay.calculate">
-                            Calculer le délai
-                        </button>
-
-                        <div id="delay-result" class="result-section hidden">
-                            <h4 data-i18n="delay.result">Délai :</h4>
-                            <div id="delay-content"></div>
-                        </div>
-                    </div>
+            <!-- ================= TAB: ANALYSEUR OCT ================= -->
+            <div id="tab-oct-analyzer" class="tab-panel" role="tabpanel">
+                <div class="hero-section">
+                    <h2>
+                        <span data-i18n="oct.title">Analyseur OCT - Suivi Spectralis</span>
+                        <span class="beta-badge beta-badge--lg">BETA</span>
+                    </h2>
+                    <p data-i18n="oct.subtitle">Suivi d'évolution des images OCT Spectralis Heidelberg</p>
                 </div>
-            </section>
 
-            <!-- Informations sur les médicaments -->
-            <section class="medications-info">
-                <div class="card">
+                <!-- Paramètres patient -->
+                <div class="card oct-patient-card">
                     <div class="card__header">
-                        <h3 data-i18n="medications.title">Base de données des médicaments</h3>
+                        <h3 data-i18n="oct.patient_params">Paramètres du suivi</h3>
                     </div>
                     <div class="card__body">
-                        <div class="medication-categories">
-                            <div class="category">
-                                <h4 data-i18n="medications.anti_vegf">Anti-VEGF</h4>
-                                <div id="anti-vegf-list" class="medication-list"></div>
+                        <div class="grid-3-col">
+                            <div class="form-group">
+                                <label class="form-label" data-i18n="oct.eye">Oeil :</label>
+                                <select id="oct-eye" class="form-control">
+                                    <option value="OD">OD (Oeil droit)</option>
+                                    <option value="OS">OS (Oeil gauche)</option>
+                                </select>
                             </div>
-                            <div class="category">
-                                <h4 data-i18n="medications.corticoids">Corticoïdes</h4>
-                                <div id="corticoids-list" class="medication-list"></div>
+                            <div class="form-group">
+                                <label class="form-label" data-i18n="oct.pathology">Pathologie :</label>
+                                <select id="oct-pathology" class="form-control">
+                                    <option value="dmla">DMLA humide</option>
+                                    <option value="diabetic">Maculopathie diabétique</option>
+                                    <option value="rvo">Occlusions veineuses</option>
+                                    <option value="irvine_gass">Syndrome d'Irvine-Gass</option>
+                                    <option value="uveitis">Uvéites</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" data-i18n="oct.medication">Traitement en cours :</label>
+                                <select id="oct-medication" class="form-control">
+                                    <option value="">Sélectionner</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
 
-            <!-- Recommandations par pathologie -->
-            <section class="pathology-recommendations">
-                <div class="card">
-                    <div class="card__header">
-                        <h3 data-i18n="recommendations.title">Recommandations thérapeutiques</h3>
+                <div class="grid-oct-layout">
+                    <!-- Colonne gauche : Saisie nouvelle visite -->
+                    <div class="oct-input-col">
+                        <div class="card">
+                            <div class="card__header">
+                                <h3 data-i18n="oct.new_visit">Nouvelle visite</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="oct.visit_date">Date de la visite :</label>
+                                    <input type="date" id="oct-visit-date" class="form-control">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="oct.image_upload">Image OCT (B-scan Spectralis) :</label>
+                                    <div class="file-upload-zone" id="oct-upload-zone">
+                                        <input type="file" id="oct-image-input" accept="image/*" class="file-input">
+                                        <div class="file-upload-content">
+                                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                            <span data-i18n="oct.drop_image">Glisser ou cliquer pour importer une image OCT</span>
+                                        </div>
+                                    </div>
+                                    <div id="oct-image-preview" class="oct-image-preview hidden">
+                                        <img id="oct-preview-img" alt="OCT preview">
+                                        <button id="oct-remove-image" class="btn btn--sm btn--outline">&times;</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="oct.crt">Épaisseur Rétinienne Centrale (CRT) :</label>
+                                    <div class="input-with-unit">
+                                        <input type="number" id="oct-crt" class="form-control" min="100" max="900" placeholder="ex: 285">
+                                        <span class="input-unit">µm</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="oct.va">Acuité visuelle (optionnel) :</label>
+                                    <input type="text" id="oct-va" class="form-control" placeholder="ex: 20/40 ou 6/10">
+                                </div>
+
+                                <fieldset class="oct-findings-fieldset">
+                                    <legend data-i18n="oct.findings">Findings OCT</legend>
+
+                                    <div class="oct-finding-row">
+                                        <label class="form-label">SRF (Liquide sous-rétinien) :</label>
+                                        <div class="radio-group">
+                                            <label class="radio-label"><input type="radio" name="oct-srf" value="absent" checked> <span>Absent</span></label>
+                                            <label class="radio-label"><input type="radio" name="oct-srf" value="trace"> <span>Trace</span></label>
+                                            <label class="radio-label"><input type="radio" name="oct-srf" value="present"> <span>Présent</span></label>
+                                        </div>
+                                    </div>
+
+                                    <div class="oct-finding-row">
+                                        <label class="form-label">IRF (Liquide intra-rétinien) :</label>
+                                        <div class="radio-group">
+                                            <label class="radio-label"><input type="radio" name="oct-irf" value="absent" checked> <span>Absent</span></label>
+                                            <label class="radio-label"><input type="radio" name="oct-irf" value="trace"> <span>Trace</span></label>
+                                            <label class="radio-label"><input type="radio" name="oct-irf" value="present"> <span>Présent</span></label>
+                                        </div>
+                                    </div>
+
+                                    <div class="oct-finding-row">
+                                        <label class="form-label">PED (Décollement de l'EP) :</label>
+                                        <div class="radio-group">
+                                            <label class="radio-label"><input type="radio" name="oct-ped" value="absent" checked> <span>Absent</span></label>
+                                            <label class="radio-label"><input type="radio" name="oct-ped" value="flat"> <span>Plat</span></label>
+                                            <label class="radio-label"><input type="radio" name="oct-ped" value="dome"> <span>Bombé</span></label>
+                                            <label class="radio-label"><input type="radio" name="oct-ped" value="irregular"> <span>Irrégulier</span></label>
+                                        </div>
+                                    </div>
+
+                                    <div class="oct-finding-row">
+                                        <label class="form-label">DRIL :</label>
+                                        <div class="radio-group">
+                                            <label class="radio-label"><input type="radio" name="oct-dril" value="absent" checked> <span>Absent</span></label>
+                                            <label class="radio-label"><input type="radio" name="oct-dril" value="present"> <span>Présent</span></label>
+                                        </div>
+                                    </div>
+
+                                    <div class="oct-finding-row">
+                                        <label class="form-label">Zone ellipsoïde :</label>
+                                        <div class="radio-group">
+                                            <label class="radio-label"><input type="radio" name="oct-ez" value="intact" checked> <span>Intacte</span></label>
+                                            <label class="radio-label"><input type="radio" name="oct-ez" value="disrupted"> <span>Altérée</span></label>
+                                            <label class="radio-label"><input type="radio" name="oct-ez" value="absent"> <span>Absente</span></label>
+                                        </div>
+                                    </div>
+
+                                    <div class="oct-finding-row">
+                                        <label class="form-label">ELM (Membrane limitante externe) :</label>
+                                        <div class="radio-group">
+                                            <label class="radio-label"><input type="radio" name="oct-elm" value="intact" checked> <span>Intacte</span></label>
+                                            <label class="radio-label"><input type="radio" name="oct-elm" value="disrupted"> <span>Altérée</span></label>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="oct.current_interval">Intervalle actuel (semaines) :</label>
+                                    <input type="number" id="oct-current-interval" class="form-control" min="4" max="16" value="4">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" data-i18n="oct.notes">Notes cliniques :</label>
+                                    <textarea id="oct-notes" class="form-control" rows="2" placeholder="Observations supplémentaires..."></textarea>
+                                </div>
+
+                                <button id="oct-add-visit-btn" class="btn btn--primary btn--full-width" data-i18n="oct.add_visit">
+                                    Ajouter cette visite
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card__body">
-                        <div id="pathology-info" class="pathology-info"></div>
+
+                    <!-- Colonne droite : Résultats & Suivi -->
+                    <div class="oct-results-col">
+                        <!-- Aide à la décision -->
+                        <div class="card" id="oct-decision-card" style="display:none;">
+                            <div class="card__header card__header--decision">
+                                <h3 data-i18n="oct.decision">Aide à la décision</h3>
+                            </div>
+                            <div class="card__body" id="oct-decision-content"></div>
+                        </div>
+
+                        <!-- Graphique CRT -->
+                        <div class="card" id="oct-chart-card" style="display:none;">
+                            <div class="card__header">
+                                <h3 data-i18n="oct.crt_chart">Évolution CRT</h3>
+                            </div>
+                            <div class="card__body">
+                                <div id="oct-crt-chart" class="oct-chart-container"></div>
+                            </div>
+                        </div>
+
+                        <!-- Timeline des fluides -->
+                        <div class="card" id="oct-fluid-card" style="display:none;">
+                            <div class="card__header">
+                                <h3 data-i18n="oct.fluid_timeline">Timeline des fluides</h3>
+                            </div>
+                            <div class="card__body">
+                                <div id="oct-fluid-timeline" class="oct-fluid-timeline"></div>
+                            </div>
+                        </div>
+
+                        <!-- Historique des visites -->
+                        <div class="card">
+                            <div class="card__header flex items-center justify-between">
+                                <h3 data-i18n="oct.history">Historique des visites</h3>
+                                <button id="oct-clear-btn" class="btn btn--sm btn--outline" data-i18n="oct.clear" style="display:none;">Réinitialiser</button>
+                            </div>
+                            <div class="card__body">
+                                <div id="oct-visits-list" class="oct-visits-list">
+                                    <div class="oct-empty-state" data-i18n="oct.no_visits">
+                                        Aucune visite enregistrée. Ajoutez une première visite pour commencer le suivi.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Comparaison côte à côte -->
+                        <div class="card" id="oct-compare-card" style="display:none;">
+                            <div class="card__header">
+                                <h3 data-i18n="oct.compare">Comparaison côte à côte</h3>
+                            </div>
+                            <div class="card__body">
+                                <div class="grid-2-col gap-16">
+                                    <div class="form-group">
+                                        <label class="form-label">Visite A :</label>
+                                        <select id="oct-compare-a" class="form-control"></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Visite B :</label>
+                                        <select id="oct-compare-b" class="form-control"></select>
+                                    </div>
+                                </div>
+                                <div id="oct-comparison-view" class="oct-comparison-view"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- Disclaimer -->
+            <!-- ================= TAB: MÉDICAMENTS ================= -->
+            <div id="tab-medications" class="tab-panel" role="tabpanel">
+                <div class="hero-section">
+                    <h2 data-i18n="medications.hero_title">Base de données des médicaments IVT</h2>
+                    <p data-i18n="medications.hero_subtitle">Référence complète des molécules disponibles pour les injections intravitréennes</p>
+                </div>
+
+                <section class="medications-info">
+                    <div class="card">
+                        <div class="card__header">
+                            <h3 data-i18n="medications.anti_vegf">Anti-VEGF</h3>
+                        </div>
+                        <div class="card__body">
+                            <div id="anti-vegf-list" class="medication-grid"></div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-top: var(--space-24);">
+                        <div class="card__header">
+                            <h3 data-i18n="medications.corticoids">Corticoïdes</h3>
+                        </div>
+                        <div class="card__body">
+                            <div id="corticoids-list" class="medication-grid"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ================= DISCLAIMER (visible sur tous les onglets) ================= -->
             <section class="disclaimer">
                 <div class="card">
                     <div class="card__header">
@@ -196,15 +500,15 @@
                     <div class="card__body">
                         <div class="disclaimer-content">
                             <p data-i18n="disclaimer.content1">
-                                Ce site ne remplace pas le jugement clinique du médecin. Les recommandations 
+                                Ce site ne remplace pas le jugement clinique du médecin. Les recommandations
                                 présentées sont indicatives et doivent être adaptées à chaque patient.
                             </p>
                             <p data-i18n="disclaimer.content2">
-                                L'utilisation de médicaments hors AMM (Autorisation de Mise sur le Marché) 
+                                L'utilisation de médicaments hors AMM (Autorisation de Mise sur le Marché)
                                 relève de la responsabilité du prescripteur selon l'article L.5121-12-1 du CSP.
                             </p>
                             <p data-i18n="disclaimer.content3">
-                                Les intervalles d'injection doivent être ajustés selon la réponse thérapeutique 
+                                Les intervalles d'injection doivent être ajustés selon la réponse thérapeutique
                                 et l'état clinique du patient.
                             </p>
                         </div>
