@@ -109,27 +109,27 @@ const pathologyData = {
     name: "Maculopathie diabétique",
     nameEn: "Diabetic maculopathy",
     first_line: ["Lucentis", "Eylea", "Eylea HD", "Vabysmo"],
-    alternatives: ["Ozurdex", "Kénacort"],
+    alternatives: ["Ozurdex"],
     protocol: "Injections mensuelles puis extension"
   },
   rvo: {
     name: "Occlusions veineuses",
     nameEn: "Retinal vein occlusions",
-    first_line: ["Lucentis", "Eylea", "Vabysmo"],
-    alternatives: ["Ozurdex", "Kénacort"],
-    protocol: "Selon réponse thérapeutique"
+    first_line: ["Lucentis", "Eylea", "Eylea HD", "Vabysmo", "Beovu", "Avastin"],
+    alternatives: ["Ozurdex"],
+    protocol: "Tous anti-VEGF autorisés - Selon réponse thérapeutique"
   },
   irvine_gass: {
     name: "Syndrome d'Irvine-Gass",
     nameEn: "Irvine-Gass syndrome",
     first_line: ["AINS topiques", "Acétazolamide"],
-    second_line: ["Kénacort", "Ozurdex"],
+    second_line: ["Ozurdex"],
     protocol: "Escalade thérapeutique"
   },
   uveitis: {
     name: "Uvéites",
     nameEn: "Uveitis",
-    first_line: ["Ozurdex", "Kénacort"],
+    first_line: ["Ozurdex"],
     protocol: "Selon sévérité et réponse"
   }
 };
@@ -1155,6 +1155,7 @@ function addOCTVisit() {
   const dril = document.querySelector('input[name="oct-dril"]:checked').value;
   const ez = document.querySelector('input[name="oct-ez"]:checked').value;
   const elm = document.querySelector('input[name="oct-elm"]:checked').value;
+  const erm = document.querySelector('input[name="oct-erm"]:checked').value;
 
   const visit = {
     id: Date.now().toString(),
@@ -1167,6 +1168,7 @@ function addOCTVisit() {
     dril: dril,
     ez: ez,
     elm: elm,
+    erm: erm,
     interval: interval || 4,
     notes: notes || '',
     imageData: currentOCTImageData || null,
@@ -1516,6 +1518,8 @@ function analyzeOCTData(latest, previous) {
   const hasTraceFluid = latest.srf === 'trace' || latest.irf === 'trace';
   const hasPED = latest.ped !== 'absent';
   const crtElevated = latest.crt > 300;
+  const hasErm = latest.erm && latest.erm !== 'absent';
+  const hasTractonalErm = latest.erm === 'traction';
 
   let fluidImproved = false;
   let fluidWorsened = false;
@@ -1527,6 +1531,22 @@ function analyzeOCTData(latest, previous) {
     fluidImproved = prevActive && !currActive;
     fluidWorsened = !prevActive && currActive;
     crtDelta = latest.crt - previous.crt;
+  }
+
+  // Attention immédiate si membrane tractionnelle
+  if (hasTractonalErm) {
+    return {
+      level: 'urgent',
+      title: isFr ? '⚠️ Membrane épirétinienne tractionnelle' : '⚠️ Tractional ERM',
+      details: isFr
+        ? '<ul><li>Avis spécialisé rétine vivement recommandé</li>'
+          + '<li>Évaluation pour chirurgie vitréo-rétinienne si sympomatique</li>'
+          + '<li>IVT peut compléter mais ne résout pas la traction mécanique</li></ul>'
+        : '<ul><li>Retina specialist opinion strongly recommended</li>'
+          + '<li>Evaluation for vitreoretinal surgery if symptomatic</li>'
+          + '<li>IVT can complement but does not resolve mechanical traction</li></ul>',
+      suggestedInterval: null
+    };
   }
 
   // Decision logic
@@ -1676,6 +1696,7 @@ function renderOCTComparison() {
   html += '<strong>CRT:</strong> ' + visitA.crt + ' µm<br>';
   html += '<strong>SRF:</strong> ' + visitA.srf + ' | <strong>IRF:</strong> ' + visitA.irf + '<br>';
   html += '<strong>PED:</strong> ' + visitA.ped + ' | <strong>EZ:</strong> ' + visitA.ez;
+  if (visitA.erm) html += '<br><strong>ERM:</strong> ' + visitA.erm;
   if (visitA.va) html += '<br><strong>AV:</strong> ' + visitA.va;
   html += '</div></div>';
 
@@ -1693,6 +1714,7 @@ function renderOCTComparison() {
   html += '<strong>CRT:</strong> ' + visitB.crt + ' µm<br>';
   html += '<strong>SRF:</strong> ' + visitB.srf + ' | <strong>IRF:</strong> ' + visitB.irf + '<br>';
   html += '<strong>PED:</strong> ' + visitB.ped + ' | <strong>EZ:</strong> ' + visitB.ez;
+  if (visitB.erm) html += '<br><strong>ERM:</strong> ' + visitB.erm;
   if (visitB.va) html += '<br><strong>AV:</strong> ' + visitB.va;
   html += '</div></div>';
 
