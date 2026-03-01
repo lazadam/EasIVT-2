@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EasIVT - Calculateur IVT & Analyseur OCT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,772 +16,1108 @@
                 <h2>Avertissement Professionnel</h2>
             </div>
             <div class="modal-body">
-                <p>Ce site est destiné exclusivement aux professionnels de santé.</p>
-                <p>Les outils présentés sont à visée d'aide à la décision et ne remplacent en aucun cas le jugement clinique.</p>
-                <p>Confirmez-vous être un professionnel de santé ?</p>
+                <p>Ce site est exclusivement destin&eacute; aux professionnels de sant&eacute;.</p>
+                <p>Les outils pr&eacute;sent&eacute;s sont &agrave; vis&eacute;e d'aide &agrave; la d&eacute;cision et ne remplacent en aucun cas le jugement clinique.</p>
+                <p><strong>Confirmez-vous &ecirc;tre un professionnel de sant&eacute; ?</strong></p>
             </div>
             <div class="modal-footer">
-                <button id="confirm-professional" class="btn btn--primary btn--lg">
-                    Je suis un professionnel de santé
+                <button id="confirm-professional" class="btn btn--teal btn--lg">
+                    Je suis un professionnel de sant&eacute;
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Contenu principal -->
+    <!-- ================= CONTENU PRINCIPAL ================= -->
     <div id="main-content" class="main-content hidden">
+
+        <!-- HEADER -->
         <header class="header">
-            <div class="container">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-8">
-                        <h1 class="logo">EasIVT</h1>
-                        <span class="version-badge">v1.0</span>
-                    </div>
-                    <div class="header-controls">
-                        <select id="language-selector" class="form-control language-selector">
-                            <option value="fr">Français</option>
-                            <option value="en">English</option>
-                        </select>
-                    </div>
+            <div class="header-inner">
+                <div class="flex items-center">
+                    <h1 class="logo">EasIVT</h1>
+                    <span class="version-badge">v2.0</span>
+                </div>
+                <div class="header-controls">
+                    <select id="language-selector" class="language-selector">
+                        <option value="fr">FR</option>
+                        <option value="en">EN</option>
+                    </select>
                 </div>
             </div>
         </header>
 
-        <!-- Navigation par onglets -->
+        <!-- NAVIGATION -->
         <nav class="tab-navigation">
-            <div class="container">
-                <div class="tab-list" role="tablist">
-                    <button class="tab-btn active" data-tab="calculator" role="tab" aria-selected="true">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
-                        <span data-i18n="nav.calculator">Calculateur IVT</span>
-                    </button>
-                    <button class="tab-btn" data-tab="scheduler" role="tab" aria-selected="false">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                        <span data-i18n="nav.scheduler">Planificateur</span>
-                    </button>
-                    <button class="tab-btn" data-tab="oct-analyzer" role="tab" aria-selected="false">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-                        <span data-i18n="nav.oct">Analyseur OCT</span>
-                        <span class="beta-badge">BETA</span>
-                    </button>
-                    <button class="tab-btn" data-tab="medications" role="tab" aria-selected="false">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3"/></svg>
-                        <span data-i18n="nav.medications">Médicaments</span>
-                    </button>
-                    <button class="tab-btn" data-tab="patients" role="tab" aria-selected="false">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                        <span>Patients</span>
-                    </button>
-                </div>
+            <div class="tab-list" role="tablist">
+                <button class="tab-btn active" data-tab="calculator" role="tab" aria-selected="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="14" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
+                    <span data-i18n="nav.calculator">Calculateur</span>
+                </button>
+                <button class="tab-btn" data-tab="scheduler" role="tab" aria-selected="false">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    <span data-i18n="nav.scheduler">Planificateur</span>
+                </button>
+                <button class="tab-btn" data-tab="oct-analyzer" role="tab" aria-selected="false">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                    <span data-i18n="nav.oct">OCT</span>
+                    <span class="beta-badge">BETA</span>
+                </button>
+                <button class="tab-btn" data-tab="patients" role="tab" aria-selected="false">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <span>Patients</span>
+                </button>
+                <button class="tab-btn" data-tab="exam" role="tab" aria-selected="false">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <span>Examen</span>
+                </button>
+                <button class="tab-btn" data-tab="medications" role="tab" aria-selected="false">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3"/></svg>
+                    <span data-i18n="nav.medications">M&eacute;dicaments</span>
+                </button>
             </div>
         </nav>
 
-        <main class="container main-container">
-            <!-- ================= TAB: CALCULATEUR IVT ================= -->
-            <div id="tab-calculator" class="tab-panel active" role="tabpanel">
-                <div class="hero-section">
-                    <h2 data-i18n="hero.title">Calculateur d'Injections Intravitréennes</h2>
-                    <p data-i18n="hero.subtitle">Outil professionnel pour le calcul et la planification des IVT</p>
+        <!-- ============================== TAB: CALCULATEUR ============================== -->
+        <div id="tab-calculator" class="tab-panel active" role="tabpanel">
+            <div class="page-title">
+                <div class="page-title-icon teal">&#128137;</div>
+                <div>
+                    <h2 data-i18n="hero.title">Calculateur IVT</h2>
+                    <p data-i18n="hero.subtitle">Calcul de prochaine injection &amp; prochains RDV</p>
                 </div>
+            </div>
 
-                <div class="grid-2-col">
-                    <!-- Quand seront mes prochains RDV ? -->
-                    <section class="calculator-section">
-                        <div class="card">
-                            <div class="card__header">
-                                <h3>Quand seront mes prochains RDV ?</h3>
-                            </div>
-                            <div class="card__body">
+            <div class="grid-2" style="align-items: start;">
+                <!-- Colonne gauche : Prochains RDV -->
+                <div style="display:flex;flex-direction:column;gap:20px;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><span class="dot dot-teal"></span> Quand seront mes prochains RDV ?</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-row">
                                 <div class="form-group">
-                                    <label class="form-label">Date de dernière injection :</label>
+                                    <label class="form-label">Date derni&egrave;re injection <span class="required">*</span></label>
                                     <input type="date" id="next-rdv-last-date" class="form-control">
                                 </div>
-
                                 <div class="form-group">
-                                    <label class="form-label">Intervalle (semaines) :</label>
+                                    <label class="form-label">Intervalle (sem.) <span class="required">*</span></label>
                                     <input type="number" id="next-rdv-interval" class="form-control" min="4" max="16" value="4">
                                 </div>
-
+                            </div>
+                            <div class="form-row">
                                 <div class="form-group">
-                                    <label class="form-label">Protocole de suivi :</label>
+                                    <label class="form-label">Protocole</label>
                                     <select id="next-rdv-protocol" class="form-control">
                                         <option value="monthly">Mensuel</option>
                                         <option value="bimonthly">Bimestriel (q8S)</option>
-                                        <option value="te">Treat & Extend</option>
-                                        <option value="prn">PRN (Pro Re Nata)</option>
+                                        <option value="te">Treat &amp; Extend</option>
+                                        <option value="prn">PRN</option>
                                     </select>
                                 </div>
-
                                 <div class="form-group">
-                                    <label class="form-label">Nombre de RDV à planifier :</label>
+                                    <label class="form-label">Nb RDV &agrave; planifier</label>
                                     <input type="number" id="next-rdv-count" class="form-control" min="1" max="12" value="3">
                                 </div>
-
-                                <button id="calculate-rdv-btn" class="btn btn--primary btn--full-width">
-                                    Calculer mes prochains RDV
-                                </button>
-
-                                <div id="rdv-result" class="result-section hidden">
-                                    <h4>Calendrier des RDV</h4>
-                                    <div id="rdv-content"></div>
-                                </div>
+                            </div>
+                            <button id="calculate-rdv-btn" class="btn btn--teal btn--full">Calculer mes prochains RDV</button>
+                            <div id="rdv-result" class="result-box hidden">
+                                <h4>Calendrier des RDV</h4>
+                                <div id="rdv-content"></div>
                             </div>
                         </div>
-                    </section>
+                    </div>
 
-                    <!-- Calculateur de prochaine injection -->
-                    <section class="calculator-section">
-                        <div class="card">
-                            <div class="card__header">
-                                <h3 data-i18n="calculator.title">Calculateur de prochaine injection (détaillé)</h3>
-                            </div>
-                            <div class="card__body">
-                                <p style="font-size:12px; color:var(--color-text-secondary); margin-bottom:16px;">
-                                    <em>Pathologie et médicament optionnels - pour affiner les recommandations</em>
-                                </p>
-
-                                <div class="form-group">
-                                    <label class="form-label" data-i18n="calculator.pathology">Pathologie (optionnel) :</label>
-                                    <select id="pathology" class="form-control">
-                                        <option value="">-- Sélectionner une pathologie --</option>
-                                        <option value="dmla">DMLA humide</option>
-                                        <option value="diabetic">Maculopathie diabétique</option>
-                                        <option value="rvo">Occlusions veineuses</option>
-                                        <option value="irvine_gass">Syndrome d'Irvine-Gass</option>
-                                        <option value="uveitis">Uvéites</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="form-label" data-i18n="calculator.medication">Médicament (optionnel) :</label>
-                                    <select id="medication" class="form-control">
-                                        <option value="">-- Sélectionner un médicament --</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="form-label" data-i18n="calculator.last_injection">Date de dernière injection :</label>
-                                    <input type="date" id="last-injection-date" class="form-control">
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="form-label" data-i18n="calculator.protocol">Protocole :</label>
-                                    <select id="protocol" class="form-control">
-                                        <option value="treat_extend">Treat & Extend</option>
-                                        <option value="prn">PRN (Pro Re Nata)</option>
-                                        <option value="monthly">Mensuel</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="form-label" data-i18n="calculator.interval">Intervalle (semaines) :</label>
-                                    <input type="number" id="interval" class="form-control" min="4" max="16" value="4">
-                                </div>
-
-                                <button id="calculate-btn" class="btn btn--primary btn--full-width" data-i18n="calculator.calculate">
-                                    Calculer prochaine injection
-                                </button>
-
-                                <div id="result" class="result-section hidden">
-                                    <h4 data-i18n="calculator.result">Résultat :</h4>
-                                    <div id="result-content"></div>
-                                </div>
-                            </div>
+                    <!-- Calculateur de d&eacute;lai -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><span class="dot dot-teal"></span> D&eacute;lai entre 2 injections</h3>
                         </div>
-                    </section>
-
-                    <!-- Calculateur de délai -->
-                    <section class="delay-calculator-section">
-                        <div class="card">
-                            <div class="card__header">
-                                <h3 data-i18n="delay.title">Calculateur de délai entre injections</h3>
-                            </div>
-                            <div class="card__body">
+                        <div class="card-body">
+                            <div class="form-row">
                                 <div class="form-group">
-                                    <label class="form-label" data-i18n="delay.first_injection">Date première injection :</label>
+                                    <label class="form-label">1&egrave;re injection <span class="required">*</span></label>
                                     <input type="date" id="first-injection-date" class="form-control">
                                 </div>
-
                                 <div class="form-group">
-                                    <label class="form-label" data-i18n="delay.second_injection">Date deuxième injection :</label>
+                                    <label class="form-label">2&egrave;me injection <span class="required">*</span></label>
                                     <input type="date" id="second-injection-date" class="form-control">
                                 </div>
-
-                                <button id="calculate-delay-btn" class="btn btn--secondary btn--full-width" data-i18n="delay.calculate">
-                                    Calculer le délai
-                                </button>
-
-                                <div id="delay-result" class="result-section hidden">
-                                    <h4 data-i18n="delay.result">Délai :</h4>
-                                    <div id="delay-content"></div>
-                                </div>
+                            </div>
+                            <button id="calculate-delay-btn" class="btn btn--outline btn--full">Calculer le d&eacute;lai</button>
+                            <div id="delay-result" class="result-box hidden">
+                                <h4 data-i18n="delay.result">D&eacute;lai :</h4>
+                                <div id="delay-content"></div>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                        <!-- Recommandations par pathologie (cliquables) -->
-                        <div class="card" style="margin-top: var(--space-24);">
-                            <div class="card__header">
-                                <h3 data-i18n="recommendations.title">Recommandations thérapeutiques</h3>
-                            </div>
-                            <div class="card__body">
-                                <div id="pathology-info" class="pathology-info"></div>
-                            </div>
+                <!-- Colonne droite : Calculateur d&eacute;taill&eacute; + Recommandations -->
+                <div style="display:flex;flex-direction:column;gap:20px;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><span class="dot dot-teal"></span> Calculateur d&eacute;taill&eacute;</h3>
                         </div>
-
-                        <!-- Ozurdex : cas spécial -->
-                        <div class="card" style="margin-top: var(--space-24);">
-                            <div class="card__header" style="background: rgba(var(--color-warning-rgb), 0.08);">
-                                <h3>Ozurdex - Gestion spécifique</h3>
-                            </div>
-                            <div class="card__body">
+                        <div class="card-body">
+                            <div class="form-row">
                                 <div class="form-group">
-                                    <label class="form-label"><strong>Contre-indications à vérifier :</strong></label>
-                                    <div style="display:grid; gap:8px;">
-                                        <label class="checkbox-label">
-                                            <input type="checkbox" id="ozurdex-sulcus"> Implant dans le sulcus
-                                        </label>
-                                        <label class="checkbox-label">
-                                            <input type="checkbox" id="ozurdex-iris"> Fixé à l'iris ou à la sclère
-                                        </label>
-                                        <label class="checkbox-label">
-                                            <input type="checkbox" id="ozurdex-ca"> Risque de passage en chambre antérieure
-                                        </label>
-                                        <label class="checkbox-label">
-                                            <input type="checkbox" id="ozurdex-glaucoma"> Glaucome non contrôlé
-                                        </label>
-                                        <label class="checkbox-label">
-                                            <input type="checkbox" id="ozurdex-phake"> Phaque (cristallin naturel)
-                                        </label>
-                                    </div>
+                                    <label class="form-label">Pathologie <span class="optional">(optionnel)</span></label>
+                                    <select id="pathology" class="form-control">
+                                        <option value="">-- S&eacute;lectionner --</option>
+                                        <option value="dmla">DMLA humide</option>
+                                        <option value="diabetic">Maculopathie diab&eacute;tique</option>
+                                        <option value="rvo">Occlusions veineuses</option>
+                                        <option value="irvine_gass">Syndrome d'Irvine-Gass</option>
+                                        <option value="uveitis">Uv&eacute;ites</option>
+                                    </select>
                                 </div>
-
-                                <div class="ozurdex-info">
-                                    <p><strong>Suivi requis :</strong></p>
-                                    <ul style="margin:8px 0 0 16px;">
-                                        <li>Contrôle PIO : 7 à 15 jours après injection</li>
-                                        <li>Évaluation efficacité : M1 à M2</li>
-                                        <li>Délai minimum avant réinjection : M3 à M4</li>
-                                        <li>À 2 Ozurdex efficaces : évaluer passage à Iluvien (même jour ou +15j)</li>
-                                    </ul>
+                                <div class="form-group">
+                                    <label class="form-label">M&eacute;dicament <span class="optional">(optionnel)</span></label>
+                                    <select id="medication" class="form-control">
+                                        <option value="">-- S&eacute;lectionner --</option>
+                                    </select>
                                 </div>
-
-                                <button id="ozurdex-info-btn" class="btn btn--secondary btn--full-width" style="margin-top:16px;">
-                                    → Voir recommandations détaillées Ozurdex
-                                </button>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Derni&egrave;re injection <span class="required">*</span></label>
+                                    <input type="date" id="last-injection-date" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Intervalle (sem.) <span class="required">*</span></label>
+                                    <input type="number" id="interval" class="form-control" min="4" max="16" value="4">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Protocole</label>
+                                <select id="protocol" class="form-control">
+                                    <option value="treat_extend">Treat &amp; Extend</option>
+                                    <option value="prn">PRN (Pro Re Nata)</option>
+                                    <option value="monthly">Mensuel</option>
+                                </select>
+                            </div>
+                            <button id="calculate-btn" class="btn btn--teal btn--full" data-i18n="calculator.calculate">Calculer prochaine injection</button>
+                            <div id="result" class="result-box hidden">
+                                <h4 data-i18n="calculator.result">R&eacute;sultat :</h4>
+                                <div id="result-content"></div>
                             </div>
                         </div>
-                    </section>
+                    </div>
+
+                    <!-- Recommandations -->
+                    <div class="card">
+                        <div class="card-header"><h3><span class="dot dot-teal"></span> Recommandations</h3></div>
+                        <div class="card-body">
+                            <div id="pathology-info" class="pathology-grid"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- ================= TAB: PLANIFICATEUR ================= -->
-            <div id="tab-scheduler" class="tab-panel" role="tabpanel">
-                <div class="hero-section">
-                    <h2 data-i18n="scheduler.title">Planificateur d'injections</h2>
-                    <p data-i18n="scheduler.subtitle">Générez un schéma complet d'injections selon le protocole choisi</p>
-                </div>
+            <div class="disclaimer">
+                <strong>Avertissement :</strong> Cet outil ne remplace pas le jugement clinique. Les intervalles doivent &ecirc;tre adapt&eacute;s &agrave; chaque patient.
+            </div>
+        </div>
 
-                <div class="card" style="max-width: 700px; margin: 0 auto;">
-                    <div class="card__header">
-                        <h3 data-i18n="scheduler.form_title">Paramètres du schéma thérapeutique</h3>
-                    </div>
-                    <div class="card__body">
+        <!-- ============================== TAB: PLANIFICATEUR ============================== -->
+        <div id="tab-scheduler" class="tab-panel" role="tabpanel">
+            <div class="page-title">
+                <div class="page-title-icon coral">&#128197;</div>
+                <div>
+                    <h2 data-i18n="scheduler.title">Planificateur d'injections</h2>
+                    <p data-i18n="scheduler.subtitle">G&eacute;n&eacute;rez un sch&eacute;ma complet d'injections</p>
+                </div>
+            </div>
+
+            <div class="grid-2" style="align-items: start;">
+                <!-- Formulaire -->
+                <div class="card">
+                    <div class="card-header"><h3><span class="dot dot-coral"></span> Param&egrave;tres du sch&eacute;ma</h3></div>
+                    <div class="card-body">
                         <div class="form-group">
-                            <label class="form-label" data-i18n="scheduler.medication">Médicament :</label>
+                            <label class="form-label">M&eacute;dicament <span class="optional">(optionnel)</span></label>
                             <select id="scheduler-medication" class="form-control">
-                                <option value="">Sélectionner un médicament</option>
+                                <option value="">-- S&eacute;lectionner --</option>
                             </select>
                         </div>
-
                         <div class="form-group">
-                            <label class="form-label" data-i18n="scheduler.start_date">Date de départ :</label>
+                            <label class="form-label">Date de d&eacute;part <span class="required">*</span></label>
                             <input type="date" id="ivt-start-date" class="form-control">
                         </div>
-
                         <div class="form-group">
-                            <label class="form-label" data-i18n="scheduler.protocol">Schéma thérapeutique :</label>
+                            <label class="form-label">Sch&eacute;ma th&eacute;rapeutique <span class="required">*</span></label>
                             <select id="ivt-protocol" class="form-control">
-                                <option value="loading">Dose de charge (3 injections mensuelles)</option>
-                                <option value="loading4">Dose de charge (4 injections mensuelles - Vabysmo)</option>
-                                <option value="te">Treat & Extend (extension progressive)</option>
-                                <option value="ozurdex_initial">Ozurdex - Schéma initial</option>
+                                <option value="loading">Dose de charge (3 inj. mensuelles)</option>
+                                <option value="loading4">Dose de charge (4 inj. - Vabysmo)</option>
+                                <option value="te">Treat &amp; Extend (extension)</option>
+                                <option value="ozurdex_initial">Ozurdex - Sch&eacute;ma initial</option>
                                 <option value="fixed">Mensuel fixe (6 mois)</option>
-                                <option value="bimonthly">Bimestriel (q8 semaines)</option>
+                                <option value="bimonthly">Bimestriel (q8 sem.)</option>
                             </select>
                         </div>
 
-                        <div class="form-group" id="te-params" style="display:none;">
-                            <label class="form-label" data-i18n="scheduler.initial_interval">Intervalle initial (semaines) :</label>
-                            <input type="number" id="te-initial-interval" class="form-control" min="4" max="8" value="6">
-                            <label class="form-label mt-8" data-i18n="scheduler.extension_step">Palier d'extension (semaines) :</label>
-                            <input type="number" id="te-extension-step" class="form-control" min="1" max="4" value="2">
-                            <label class="form-label mt-8" data-i18n="scheduler.max_interval">Intervalle maximum (semaines) :</label>
-                            <input type="number" id="te-max-interval" class="form-control" min="8" max="16" value="12">
-                            <small style="display:block; color:var(--color-text-secondary); margin-top:8px;">
-                                <em>Le T&E augmente automatiquement de palier à chaque injection selon la réponse.</em>
-                            </small>
+                        <!-- Param&egrave;tres T&E -->
+                        <div id="te-params" style="display:none;" class="patient-section">
+                            <div class="patient-section-title">Param&egrave;tres Treat &amp; Extend</div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Intervalle initial (sem.)</label>
+                                    <input type="number" id="te-initial-interval" class="form-control" min="4" max="8" value="6">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Palier extension (sem.)</label>
+                                    <input type="number" id="te-extension-step" class="form-control" min="1" max="4" value="2">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Intervalle max (sem.)</label>
+                                <input type="number" id="te-max-interval" class="form-control" min="8" max="16" value="12">
+                            </div>
+                            <p class="form-hint">Le T&amp;E augmente automatiquement de palier &agrave; chaque injection.</p>
                         </div>
 
-                        <div class="form-group" id="ozurdex-params" style="display:none;">
-                            <label class="form-label"><strong>Schéma Ozurdex spécifique</strong></label>
-                            <p style="font-size:12px; color:var(--color-text-secondary); margin-bottom:12px;">
-                                Première injection suivie d'évaluation à M1-M2, réinjection possible à M3-M4 si efficace.
+                        <!-- Param&egrave;tres Ozurdex -->
+                        <div id="ozurdex-params" style="display:none;" class="ozurdex-card">
+                            <h4>Sch&eacute;ma Ozurdex sp&eacute;cifique</h4>
+                            <p style="font-size:0.78rem;color:#92400E;margin-bottom:10px;">
+                                1&egrave;re injection &rarr; Contr&ocirc;le PIO J7-J15 &rarr; &Eacute;valuation M1-M2 &rarr; R&eacute;injection M3-M4
                             </p>
                             <label class="checkbox-label">
-                                <input type="checkbox" id="ozurdex-pio-check"> Contrôle PIO prévu à J7-J15
+                                <input type="checkbox" id="ozurdex-pio-check"> Contr&ocirc;le PIO pr&eacute;vu &agrave; J7-J15
                             </label>
                         </div>
 
-                        <button id="generate-dates-btn" class="btn btn--primary btn--full-width" data-i18n="scheduler.generate">
-                            Générer les dates
-                        </button>
+                        <button id="generate-dates-btn" class="btn btn--coral btn--full" style="margin-top:14px;" data-i18n="scheduler.generate">G&eacute;n&eacute;rer les dates</button>
+                    </div>
+                </div>
 
-                        <div id="ivt-dates-result" class="hidden" style="margin-top: var(--space-24);">
-                            <h4 data-i18n="scheduler.planned_dates">Dates prévues :</h4>
-                            <div id="ivt-dates-list" class="schedule-list"></div>
-                            <div class="schedule-summary" id="schedule-summary"></div>
-                        </div>
+                <!-- R&eacute;sultats -->
+                <div class="card" id="ivt-dates-result" style="display:none;">
+                    <div class="card-header"><h3><span class="dot dot-coral"></span> Dates pr&eacute;vues</h3></div>
+                    <div class="card-body">
+                        <div id="schedule-summary" class="schedule-summary"></div>
+                        <div id="ivt-dates-list" class="schedule-list" style="margin-top:12px;"></div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- ================= TAB: ANALYSEUR OCT ================= -->
-            <div id="tab-oct-analyzer" class="tab-panel" role="tabpanel">
-                <div class="hero-section">
-                    <h2>
-                        <span data-i18n="oct.title">Analyseur OCT - Suivi Spectralis</span>
-                        <span class="beta-badge beta-badge--lg">BETA</span>
-                    </h2>
-                    <p data-i18n="oct.subtitle">Suivi d'évolution des images OCT Spectralis Heidelberg</p>
+        <!-- ============================== TAB: OCT ANALYZER ============================== -->
+        <div id="tab-oct-analyzer" class="tab-panel" role="tabpanel">
+            <div class="page-title">
+                <div class="page-title-icon purple">&#128065;</div>
+                <div>
+                    <h2 data-i18n="oct.title">Analyseur OCT Spectralis</h2>
+                    <p data-i18n="oct.subtitle">Suivi d'&eacute;volution et aide &agrave; la d&eacute;cision</p>
                 </div>
+            </div>
 
-                <!-- Paramètres patient -->
-                <div class="card oct-patient-card">
-                    <div class="card__header">
-                        <h3 data-i18n="oct.patient_params">Paramètres du suivi</h3>
-                    </div>
-                    <div class="card__body">
-                        <div class="grid-3-col">
-                            <div class="form-group">
-                                <label class="form-label" data-i18n="oct.eye">Oeil :</label>
-                                <select id="oct-eye" class="form-control">
-                                    <option value="OD">OD (Oeil droit)</option>
-                                    <option value="OS">OS (Oeil gauche)</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" data-i18n="oct.pathology">Pathologie :</label>
-                                <select id="oct-pathology" class="form-control">
-                                    <option value="dmla">DMLA humide</option>
-                                    <option value="diabetic">Maculopathie diabétique</option>
-                                    <option value="rvo">Occlusions veineuses</option>
-                                    <option value="irvine_gass">Syndrome d'Irvine-Gass</option>
-                                    <option value="uveitis">Uvéites</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" data-i18n="oct.medication">Traitement en cours :</label>
-                                <select id="oct-medication" class="form-control">
-                                    <option value="">Sélectionner</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Param&egrave;tres patient OCT -->
+            <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;flex-shrink:0;">
+                <div class="form-group" style="margin:0;min-width:120px;">
+                    <label class="form-label">Oeil</label>
+                    <select id="oct-eye" class="form-control">
+                        <option value="OD">OD (Droit)</option>
+                        <option value="OS">OS (Gauche)</option>
+                    </select>
                 </div>
+                <div class="form-group" style="margin:0;min-width:160px;">
+                    <label class="form-label">Pathologie</label>
+                    <select id="oct-pathology" class="form-control">
+                        <option value="dmla">DMLA</option>
+                        <option value="diabetic">Diab&eacute;tique</option>
+                        <option value="rvo">OVR</option>
+                        <option value="irvine_gass">Irvine-Gass</option>
+                        <option value="uveitis">Uv&eacute;ites</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin:0;min-width:140px;">
+                    <label class="form-label">Traitement</label>
+                    <select id="oct-medication" class="form-control">
+                        <option value="">--</option>
+                        <option value="Lucentis">Lucentis</option>
+                        <option value="Eylea">Eylea</option>
+                        <option value="Eylea HD">Eylea HD</option>
+                        <option value="Vabysmo">Vabysmo</option>
+                        <option value="Beovu">Beovu</option>
+                        <option value="Avastin">Avastin</option>
+                        <option value="Ozurdex">Ozurdex</option>
+                    </select>
+                </div>
+                <div style="margin-left:auto;display:flex;align-items:flex-end;">
+                    <button id="oct-clear-btn" class="btn btn--ghost btn--sm" style="display:none;">Reinitialiser</button>
+                </div>
+            </div>
 
-                <div class="grid-oct-layout">
-                    <!-- Colonne gauche : Saisie nouvelle visite -->
-                    <div class="oct-input-col">
-                        <div class="card">
-                            <div class="card__header">
-                                <h3 data-i18n="oct.new_visit">Nouvelle visite</h3>
-                            </div>
-                            <div class="card__body">
+            <div class="oct-layout">
+                <!-- Colonne gauche : Formulaire nouvelle visite -->
+                <div style="display:flex;flex-direction:column;gap:16px;overflow-y:auto;">
+                    <div class="card">
+                        <div class="card-header"><h3><span class="dot dot-purple"></span> Nouvelle visite</h3></div>
+                        <div class="card-body">
+                            <div class="form-row">
                                 <div class="form-group">
-                                    <label class="form-label" data-i18n="oct.visit_date">Date de la visite :</label>
+                                    <label class="form-label">Date <span class="required">*</span></label>
                                     <input type="date" id="oct-visit-date" class="form-control">
                                 </div>
-
                                 <div class="form-group">
-                                    <label class="form-label" data-i18n="oct.image_upload">Image OCT (B-scan Spectralis) :</label>
-                                    <div class="file-upload-zone" id="oct-upload-zone">
-                                        <input type="file" id="oct-image-input" accept="image/*" class="file-input">
-                                        <div class="file-upload-content">
-                                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                                            <span data-i18n="oct.drop_image">Glisser ou cliquer pour importer une image OCT</span>
-                                        </div>
-                                    </div>
-                                    <div id="oct-image-preview" class="oct-image-preview hidden">
-                                        <img id="oct-preview-img" alt="OCT preview">
-                                        <button id="oct-remove-image" class="btn btn--sm btn--outline">&times;</button>
-                                    </div>
+                                    <label class="form-label">CRT (&micro;m) <span class="required">*</span></label>
+                                    <input type="number" id="oct-crt" class="form-control" min="100" max="900" placeholder="280">
                                 </div>
-
+                            </div>
+                            <div class="form-row">
                                 <div class="form-group">
-                                    <label class="form-label" data-i18n="oct.crt">Épaisseur Rétinienne Centrale (CRT) :</label>
-                                    <div class="input-with-unit">
-                                        <input type="number" id="oct-crt" class="form-control" min="100" max="900" placeholder="ex: 285">
-                                        <span class="input-unit">µm</span>
-                                    </div>
+                                    <label class="form-label">AV <span class="optional">(optionnel)</span></label>
+                                    <input type="text" id="oct-va" class="form-control" placeholder="20/40">
                                 </div>
-
                                 <div class="form-group">
-                                    <label class="form-label" data-i18n="oct.va">Acuité visuelle (optionnel) :</label>
-                                    <input type="text" id="oct-va" class="form-control" placeholder="ex: 20/40 ou 6/10">
+                                    <label class="form-label">Intervalle (sem.) <span class="required">*</span></label>
+                                    <input type="number" id="oct-interval" class="form-control" min="4" max="16" value="4">
                                 </div>
+                            </div>
 
-                                <fieldset class="oct-findings-fieldset">
-                                    <legend data-i18n="oct.findings">Findings OCT</legend>
+                            <!-- Upload image OCT -->
+                            <div class="form-group">
+                                <label class="form-label">Image OCT <span class="optional">(optionnel)</span></label>
+                                <div id="oct-upload-zone" class="oct-upload-zone">
+                                    Glisser ou cliquer pour importer
+                                    <input type="file" id="oct-image-input" accept="image/*" style="display:none;">
+                                </div>
+                                <div id="oct-image-preview" class="oct-image-preview hidden">
+                                    <img id="oct-preview-img" src="" alt="OCT Preview">
+                                </div>
+                            </div>
 
+                            <!-- Findings OCT -->
+                            <fieldset style="border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px;margin-bottom:12px;">
+                                <legend style="font-size:0.82rem;font-weight:700;color:var(--purple-dark);padding:0 6px;">Findings OCT</legend>
+                                <div class="oct-findings-grid">
                                     <div class="oct-finding-row">
-                                        <label class="form-label">SRF (Liquide sous-rétinien) :</label>
+                                        <label class="form-label">SRF</label>
                                         <div class="radio-group">
                                             <label class="radio-label"><input type="radio" name="oct-srf" value="absent" checked> <span>Absent</span></label>
                                             <label class="radio-label"><input type="radio" name="oct-srf" value="trace"> <span>Trace</span></label>
-                                            <label class="radio-label"><input type="radio" name="oct-srf" value="present"> <span>Présent</span></label>
+                                            <label class="radio-label"><input type="radio" name="oct-srf" value="present"> <span>Pr&eacute;sent</span></label>
                                         </div>
                                     </div>
-
                                     <div class="oct-finding-row">
-                                        <label class="form-label">IRF (Liquide intra-rétinien) :</label>
+                                        <label class="form-label">IRF</label>
                                         <div class="radio-group">
                                             <label class="radio-label"><input type="radio" name="oct-irf" value="absent" checked> <span>Absent</span></label>
                                             <label class="radio-label"><input type="radio" name="oct-irf" value="trace"> <span>Trace</span></label>
-                                            <label class="radio-label"><input type="radio" name="oct-irf" value="present"> <span>Présent</span></label>
+                                            <label class="radio-label"><input type="radio" name="oct-irf" value="present"> <span>Pr&eacute;sent</span></label>
                                         </div>
                                     </div>
-
                                     <div class="oct-finding-row">
-                                        <label class="form-label">PED (Décollement de l'EP) :</label>
+                                        <label class="form-label">PED</label>
                                         <div class="radio-group">
                                             <label class="radio-label"><input type="radio" name="oct-ped" value="absent" checked> <span>Absent</span></label>
                                             <label class="radio-label"><input type="radio" name="oct-ped" value="flat"> <span>Plat</span></label>
-                                            <label class="radio-label"><input type="radio" name="oct-ped" value="dome"> <span>Bombé</span></label>
-                                            <label class="radio-label"><input type="radio" name="oct-ped" value="irregular"> <span>Irrégulier</span></label>
+                                            <label class="radio-label"><input type="radio" name="oct-ped" value="dome"> <span>Bomb&eacute;</span></label>
+                                            <label class="radio-label"><input type="radio" name="oct-ped" value="irregular"> <span>Irr&eacute;gulier</span></label>
                                         </div>
                                     </div>
-
                                     <div class="oct-finding-row">
-                                        <label class="form-label">DRIL :</label>
+                                        <label class="form-label">DRIL</label>
                                         <div class="radio-group">
                                             <label class="radio-label"><input type="radio" name="oct-dril" value="absent" checked> <span>Absent</span></label>
-                                            <label class="radio-label"><input type="radio" name="oct-dril" value="present"> <span>Présent</span></label>
+                                            <label class="radio-label"><input type="radio" name="oct-dril" value="present"> <span>Pr&eacute;sent</span></label>
                                         </div>
                                     </div>
-
                                     <div class="oct-finding-row">
-                                        <label class="form-label">Zone ellipsoïde :</label>
+                                        <label class="form-label">EZ</label>
                                         <div class="radio-group">
                                             <label class="radio-label"><input type="radio" name="oct-ez" value="intact" checked> <span>Intacte</span></label>
-                                            <label class="radio-label"><input type="radio" name="oct-ez" value="disrupted"> <span>Altérée</span></label>
-                                            <label class="radio-label"><input type="radio" name="oct-ez" value="absent"> <span>Absente</span></label>
+                                            <label class="radio-label"><input type="radio" name="oct-ez" value="disrupted"> <span>Alt&eacute;r&eacute;e</span></label>
                                         </div>
                                     </div>
-
                                     <div class="oct-finding-row">
-                                        <label class="form-label">ELM (Membrane limitante externe) :</label>
+                                        <label class="form-label">ELM</label>
                                         <div class="radio-group">
                                             <label class="radio-label"><input type="radio" name="oct-elm" value="intact" checked> <span>Intacte</span></label>
-                                            <label class="radio-label"><input type="radio" name="oct-elm" value="disrupted"> <span>Altérée</span></label>
+                                            <label class="radio-label"><input type="radio" name="oct-elm" value="disrupted"> <span>Alt&eacute;r&eacute;e</span></label>
                                         </div>
                                     </div>
-
-                                    <div class="oct-finding-row">
-                                        <label class="form-label">Membrane épirétinienne :</label>
+                                    <div class="oct-finding-row" style="grid-column:1/-1;">
+                                        <label class="form-label">Membrane &eacute;pir&eacute;tinienne</label>
                                         <div class="radio-group">
                                             <label class="radio-label"><input type="radio" name="oct-erm" value="absent" checked> <span>Absente</span></label>
-                                            <label class="radio-label"><input type="radio" name="oct-erm" value="present"> <span>Présente</span></label>
+                                            <label class="radio-label"><input type="radio" name="oct-erm" value="present"> <span>Pr&eacute;sente</span></label>
                                             <label class="radio-label"><input type="radio" name="oct-erm" value="traction"> <span>Tractionnelle</span></label>
                                         </div>
                                     </div>
-                                </fieldset>
-
-                                <div class="form-group">
-                                    <label class="form-label" data-i18n="oct.current_interval">Intervalle actuel (semaines) :</label>
-                                    <input type="number" id="oct-current-interval" class="form-control" min="4" max="16" value="4">
                                 </div>
+                            </fieldset>
 
-                                <div class="form-group">
-                                    <label class="form-label" data-i18n="oct.notes">Notes cliniques :</label>
-                                    <textarea id="oct-notes" class="form-control" rows="2" placeholder="Observations supplémentaires..."></textarea>
-                                </div>
+                            <div class="form-group">
+                                <label class="form-label">Notes <span class="optional">(optionnel)</span></label>
+                                <textarea id="oct-notes" class="form-control" rows="2" placeholder="Notes cliniques..."></textarea>
+                            </div>
 
-                                <button id="oct-add-visit-btn" class="btn btn--primary btn--full-width" data-i18n="oct.add_visit">
-                                    Ajouter cette visite
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Colonne droite : Résultats & Suivi -->
-                    <div class="oct-results-col">
-                        <!-- Aide à la décision -->
-                        <div class="card" id="oct-decision-card" style="display:none;">
-                            <div class="card__header card__header--decision">
-                                <h3 data-i18n="oct.decision">Aide à la décision</h3>
-                            </div>
-                            <div class="card__body" id="oct-decision-content"></div>
-                        </div>
-
-                        <!-- Graphique CRT -->
-                        <div class="card" id="oct-chart-card" style="display:none;">
-                            <div class="card__header">
-                                <h3 data-i18n="oct.crt_chart">Évolution CRT</h3>
-                            </div>
-                            <div class="card__body">
-                                <div id="oct-crt-chart" class="oct-chart-container"></div>
-                            </div>
-                        </div>
-
-                        <!-- Timeline des fluides -->
-                        <div class="card" id="oct-fluid-card" style="display:none;">
-                            <div class="card__header">
-                                <h3 data-i18n="oct.fluid_timeline">Timeline des fluides</h3>
-                            </div>
-                            <div class="card__body">
-                                <div id="oct-fluid-timeline" class="oct-fluid-timeline"></div>
-                            </div>
-                        </div>
-
-                        <!-- Historique des visites -->
-                        <div class="card">
-                            <div class="card__header flex items-center justify-between">
-                                <h3 data-i18n="oct.history">Historique des visites</h3>
-                                <button id="oct-clear-btn" class="btn btn--sm btn--outline" data-i18n="oct.clear" style="display:none;">Réinitialiser</button>
-                            </div>
-                            <div class="card__body">
-                                <div id="oct-visits-list" class="oct-visits-list">
-                                    <div class="oct-empty-state" data-i18n="oct.no_visits">
-                                        Aucune visite enregistrée. Ajoutez une première visite pour commencer le suivi.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Comparaison côte à côte -->
-                        <div class="card" id="oct-compare-card" style="display:none;">
-                            <div class="card__header">
-                                <h3 data-i18n="oct.compare">Comparaison côte à côte</h3>
-                            </div>
-                            <div class="card__body">
-                                <div class="grid-2-col gap-16">
-                                    <div class="form-group">
-                                        <label class="form-label">Visite A :</label>
-                                        <select id="oct-compare-a" class="form-control"></select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Visite B :</label>
-                                        <select id="oct-compare-b" class="form-control"></select>
-                                    </div>
-                                </div>
-                                <div id="oct-comparison-view" class="oct-comparison-view"></div>
-                            </div>
+                            <button id="oct-add-visit-btn" class="btn btn--purple btn--full" data-i18n="oct.add_visit">Ajouter cette visite</button>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- ================= TAB: MÉDICAMENTS ================= -->
-            <div id="tab-medications" class="tab-panel" role="tabpanel">
-                <div class="hero-section">
-                    <h2 data-i18n="medications.hero_title">Base de données des médicaments IVT</h2>
-                    <p data-i18n="medications.hero_subtitle">Référence complète des molécules disponibles pour les injections intravitréennes</p>
-                </div>
-
-                <section class="medications-info">
+                <!-- Colonne droite : Historique + Charts -->
+                <div style="display:flex;flex-direction:column;gap:16px;overflow-y:auto;">
+                    <!-- Historique -->
                     <div class="card">
-                        <div class="card__header">
-                            <h3 data-i18n="medications.anti_vegf">Anti-VEGF</h3>
-                        </div>
-                        <div class="card__body">
-                            <div id="anti-vegf-list" class="medication-grid"></div>
+                        <div class="card-header"><h3><span class="dot dot-purple"></span> Historique</h3></div>
+                        <div class="card-body">
+                            <div id="oct-visits-list">
+                                <div class="oct-empty-state">Aucune visite. Ajoutez une premi&egrave;re visite.</div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="card" style="margin-top: var(--space-24);">
-                        <div class="card__header">
-                            <h3 data-i18n="medications.corticoids">Corticoïdes</h3>
-                        </div>
-                        <div class="card__body">
-                            <div id="corticoids-list" class="medication-grid"></div>
+                    <!-- Graphiques CRT -->
+                    <div class="card" id="oct-chart-card" style="display:none;">
+                        <div class="card-header"><h3><span class="dot dot-purple"></span> &Eacute;volution CRT</h3></div>
+                        <div class="card-body">
+                            <div id="oct-crt-chart" class="oct-chart-container"></div>
                         </div>
                     </div>
-                </section>
+
+                    <!-- Timeline fluides -->
+                    <div class="card" id="oct-fluid-card" style="display:none;">
+                        <div class="card-header"><h3><span class="dot dot-purple"></span> Timeline fluides</h3></div>
+                        <div class="card-body">
+                            <div id="oct-fluid-timeline"></div>
+                        </div>
+                    </div>
+
+                    <!-- Aide &agrave; la d&eacute;cision -->
+                    <div class="card" id="oct-decision-card" style="display:none;">
+                        <div class="card-header"><h3><span class="dot dot-purple"></span> Aide &agrave; la d&eacute;cision</h3></div>
+                        <div class="card-body">
+                            <div id="oct-decision-content"></div>
+                        </div>
+                    </div>
+
+                    <!-- Comparaison -->
+                    <div class="card" id="oct-compare-card" style="display:none;">
+                        <div class="card-header"><h3><span class="dot dot-purple"></span> Comparaison</h3></div>
+                        <div class="card-body">
+                            <div class="form-row" style="margin-bottom:10px;">
+                                <div class="form-group"><label class="form-label">Visite A</label><select id="oct-compare-a" class="form-control"></select></div>
+                                <div class="form-group"><label class="form-label">Visite B</label><select id="oct-compare-b" class="form-control"></select></div>
+                            </div>
+                            <div id="oct-comparison-view" class="oct-compare-grid"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <!-- ================= TAB: PATIENTS ================= -->
-            <div id="tab-patients" class="tab-panel" role="tabpanel">
-                <div class="hero-section">
+        <!-- ============================== TAB: PATIENTS ============================== -->
+        <div id="tab-patients" class="tab-panel" role="tabpanel">
+            <div class="page-title">
+                <div class="page-title-icon blue">&#128101;</div>
+                <div>
                     <h2>Gestion des patients</h2>
-                    <p>Base de données patients avec historique complet des traitements et suivi</p>
+                    <p>Base de donn&eacute;es patients avec historique</p>
                 </div>
+            </div>
 
-                <div class="grid-2-col" style="gap: 32px;">
-                    <!-- Liste des patients -->
-                    <div>
-                        <div class="card">
-                            <div class="card__header flex items-center justify-between">
-                                <h3>Mes patients</h3>
-                                <button id="new-patient-btn" class="btn btn--sm btn--primary">+ Nouveau</button>
-                            </div>
-                            <div class="card__body">
-                                <div id="patients-list" class="patients-list">
-                                    <div class="patients-empty">
-                                        <p>Aucun patient enregistré</p>
-                                        <p style="font-size:12px; color:var(--color-text-secondary);">Créez un nouveau patient pour commencer</p>
-                                    </div>
+            <div class="grid-sidebar">
+                <!-- Sidebar : Liste patients -->
+                <div style="display:flex;flex-direction:column;gap:12px;overflow:hidden;">
+                    <div class="card" style="flex:1;overflow:hidden;">
+                        <div class="card-header">
+                            <h3><span class="dot dot-blue"></span> Mes patients</h3>
+                            <button id="new-patient-btn" class="btn btn--blue btn--sm">+ Nouveau</button>
+                        </div>
+                        <div class="card-body" style="padding:10px;">
+                            <div id="patients-list" class="patient-list-container">
+                                <div class="patients-empty">
+                                    <p>&#128100;</p>
+                                    <p>Aucun patient</p>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Boutons d'action -->
-                        <div style="display:grid; gap:8px; margin-top:16px;">
-                            <button id="export-patients-btn" class="btn btn--secondary btn--full-width" title="Télécharger les données en JSON">
-                                Exporter les données
-                            </button>
-                            <button id="import-patients-btn" class="btn btn--secondary btn--full-width" title="Importer des données JSON">
-                                Importer les données
-                            </button>
-                            <input type="file" id="import-file-input" accept=".json" style="display:none;">
                         </div>
                     </div>
 
-                    <!-- Dossier patient -->
-                    <div id="patient-file-section" style="display:none;">
-                        <div class="card">
-                            <div class="card__header">
-                                <h3>Dossier patient : <span id="patient-file-name"></span></h3>
+                    <button id="export-patients-btn" class="btn btn--outline btn--sm btn--full">Exporter (JSON)</button>
+                    <button id="import-patients-btn" class="btn btn--outline btn--sm btn--full">Importer</button>
+                    <input type="file" id="import-file-input" accept=".json" style="display:none;">
+                </div>
+
+                <!-- Dossier patient -->
+                <div id="patient-file-section" style="display:none;overflow-y:auto;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><span class="dot dot-blue"></span> Dossier : <span id="patient-file-name"></span></h3>
+                            <div class="flex gap-8">
+                                <button id="save-patient-btn" class="btn btn--blue btn--sm">Sauvegarder</button>
+                                <button id="delete-patient-btn" class="btn btn--rose btn--sm">Supprimer</button>
                             </div>
-                            <div class="card__body">
-                                <!-- Identité patient -->
-                                <div class="form-group">
-                                    <label class="form-label"><strong>Identité</strong></label>
-                                    <p id="patient-id-text" style="font-size:12px; color:var(--color-text-secondary); margin-bottom:8px;"></p>
-                                </div>
+                        </div>
+                        <div class="card-body">
+                            <p id="patient-id-text" style="font-size:0.72rem;color:var(--text-muted);margin-bottom:14px;"></p>
 
-                                <!-- Informations cliniques -->
-                                <fieldset class="patient-fieldset">
-                                    <legend>Acuité visuelle & Réfraction</legend>
-                                    <div class="grid-3-col" style="gap:12px;">
-                                        <div class="form-group">
-                                            <label class="form-label">AV OD</label>
-                                            <input type="text" class="form-control patient-field" data-field="av_od" placeholder="20/40">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">AV OS</label>
-                                            <input type="text" class="form-control patient-field" data-field="av_os" placeholder="20/30">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">AV BI</label>
-                                            <input type="text" class="form-control patient-field" data-field="av_bi" placeholder="20/25">
-                                        </div>
-                                    </div>
-                                    <div class="grid-2-col">
-                                        <div class="form-group">
-                                            <label class="form-label">Réfraction OD</label>
-                                            <input type="text" class="form-control patient-field" data-field="refr_od" placeholder="-1.50 -0.75 x 180">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">Réfraction OS</label>
-                                            <input type="text" class="form-control patient-field" data-field="refr_os" placeholder="-1.25 -0.50 x 175">
-                                        </div>
-                                    </div>
-                                </fieldset>
-
-                                <!-- Pression intraoculaire -->
-                                <fieldset class="patient-fieldset">
-                                    <legend>Pression Intraoculaire</legend>
-                                    <div class="grid-2-col">
-                                        <div class="form-group">
-                                            <label class="form-label">PIO OD (mmHg)</label>
-                                            <input type="number" class="form-control patient-field" data-field="pio_od" min="0" max="60" placeholder="14">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">PIO OS (mmHg)</label>
-                                            <input type="number" class="form-control patient-field" data-field="pio_os" min="0" max="60" placeholder="15">
-                                        </div>
-                                    </div>
-                                </fieldset>
-
-                                <!-- Antécédents -->
-                                <fieldset class="patient-fieldset">
-                                    <legend>Antécédents</legend>
+                            <!-- Identit&eacute; -->
+                            <div class="patient-section">
+                                <div class="patient-section-title">&#128100; Identit&eacute;</div>
+                                <div class="form-row">
                                     <div class="form-group">
-                                        <label class="form-label">Antécédents généraux</label>
-                                        <textarea class="form-control patient-field" data-field="antecedents" rows="2" placeholder="Hypertension, diabète, etc."></textarea>
+                                        <label class="form-label">Nom <span class="required">*</span></label>
+                                        <input type="text" class="form-control patient-field" data-field="lastName" placeholder="Dupont">
                                     </div>
                                     <div class="form-group">
-                                        <label class="form-label">Antécédents ophtalmologiques</label>
-                                        <textarea class="form-control patient-field" data-field="antecedents_ophtalmologiques" rows="2" placeholder="Chirurgies antérieures, pathologies..."></textarea>
+                                        <label class="form-label">Pr&eacute;nom <span class="required">*</span></label>
+                                        <input type="text" class="form-control patient-field" data-field="firstName" placeholder="Jean">
                                     </div>
-                                </fieldset>
-
-                                <!-- Allergies -->
-                                <div class="form-group">
-                                    <label class="form-label">Allergies</label>
-                                    <textarea class="form-control patient-field" data-field="allergies" rows="2" placeholder="Médicaments, produits..."></textarea>
                                 </div>
-
-                                <!-- Notes -->
-                                <div class="form-group">
-                                    <label class="form-label">Notes générales</label>
-                                    <textarea class="form-control patient-field" data-field="notes" rows="3" placeholder="Informations supplémentaires..."></textarea>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Date de naissance <span class="required">*</span></label>
+                                        <input type="date" class="form-control patient-field" data-field="dob">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Sexe <span class="required">*</span></label>
+                                        <select class="form-control patient-field" data-field="sex">
+                                            <option value="">-- S&eacute;lectionner --</option>
+                                            <option value="M">Masculin</option>
+                                            <option value="F">F&eacute;minin</option>
+                                        </select>
+                                    </div>
                                 </div>
-
-                                <!-- Historique des visites -->
-                                <fieldset class="patient-fieldset">
-                                    <legend>Historique des visites</legend>
-                                    <div id="patient-visits-list" style="display:none;">
-                                        <div id="patient-visits-content" class="visits-timeline"></div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Lat&eacute;ralit&eacute; trait&eacute;e <span class="required">*</span></label>
+                                        <select class="form-control patient-field" data-field="laterality">
+                                            <option value="">-- S&eacute;lectionner --</option>
+                                            <option value="OD">OD (Droit)</option>
+                                            <option value="OS">OS (Gauche)</option>
+                                            <option value="ODG">ODG (Bilat&eacute;ral)</option>
+                                        </select>
                                     </div>
-                                    <div id="patient-visits-empty" class="patient-empty-state" style="color:var(--color-text-secondary); font-size:12px; text-align:center; padding:16px;">
-                                        Aucune visite enregistrée
+                                    <div class="form-group">
+                                        <label class="form-label">Statut cristallinien <span class="required">*</span></label>
+                                        <select class="form-control patient-field" data-field="lens_status">
+                                            <option value="">-- S&eacute;lectionner --</option>
+                                            <option value="phaque">Phaque</option>
+                                            <option value="pseudophaque">Pseudophaque</option>
+                                            <option value="aphaque">Aphaque</option>
+                                        </select>
                                     </div>
-                                </fieldset>
+                                </div>
+                            </div>
 
-                                <!-- Actions -->
-                                <div style="display:grid; gap:8px; grid-template-columns: 1fr 1fr; margin-top:16px;">
-                                    <button id="save-patient-btn" class="btn btn--primary">Sauvegarder</button>
-                                    <button id="delete-patient-btn" class="btn btn--danger">Supprimer patient</button>
+                            <!-- Pathologie & traitement -->
+                            <div class="patient-section">
+                                <div class="patient-section-title">&#128138; Pathologie &amp; Traitement</div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Pathologie principale <span class="required">*</span></label>
+                                        <select class="form-control patient-field" data-field="pathology">
+                                            <option value="">-- S&eacute;lectionner --</option>
+                                            <option value="dmla">DMLA humide</option>
+                                            <option value="diabetic">Maculopathie diab&eacute;tique</option>
+                                            <option value="rvo_ovcr">OVCR</option>
+                                            <option value="rvo_obvr">OBVR</option>
+                                            <option value="irvine_gass">Irvine-Gass</option>
+                                            <option value="uveitis">Uv&eacute;ite</option>
+                                            <option value="myopic_cnv">NVC myopique</option>
+                                            <option value="other">Autre</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Traitement actuel <span class="required">*</span></label>
+                                        <select class="form-control patient-field" data-field="treatment">
+                                            <option value="">-- S&eacute;lectionner --</option>
+                                            <option value="lucentis">Lucentis</option>
+                                            <option value="eylea">Eylea</option>
+                                            <option value="eylea_hd">Eylea HD</option>
+                                            <option value="vabysmo">Vabysmo</option>
+                                            <option value="beovu">Beovu</option>
+                                            <option value="avastin">Avastin</option>
+                                            <option value="ozurdex">Ozurdex</option>
+                                            <option value="iluvien">Iluvien</option>
+                                            <option value="none">Aucun</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Protocole <span class="optional">(optionnel)</span></label>
+                                        <select class="form-control patient-field" data-field="protocol">
+                                            <option value="">-- S&eacute;lectionner --</option>
+                                            <option value="te">Treat &amp; Extend</option>
+                                            <option value="prn">PRN</option>
+                                            <option value="monthly">Mensuel fixe</option>
+                                            <option value="bimonthly">Bimestriel</option>
+                                            <option value="loading">Dose de charge</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Nb injections re&ccedil;ues <span class="optional">(optionnel)</span></label>
+                                        <input type="number" class="form-control patient-field" data-field="injection_count" min="0" placeholder="0">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- AV et PIO -->
+                            <div class="patient-section">
+                                <div class="patient-section-title">&#128064; Acuit&eacute; visuelle &amp; PIO</div>
+                                <div class="grid-3" style="gap:10px;">
+                                    <div class="form-group">
+                                        <label class="form-label">AV OD <span class="optional">(opt.)</span></label>
+                                        <select class="form-control patient-field" data-field="av_od">
+                                            <option value="">--</option>
+                                            <option value="20/20">20/20</option><option value="20/25">20/25</option>
+                                            <option value="20/30">20/30</option><option value="20/40">20/40</option>
+                                            <option value="20/50">20/50</option><option value="20/60">20/60</option>
+                                            <option value="20/80">20/80</option><option value="20/100">20/100</option>
+                                            <option value="20/200">20/200</option><option value="20/400">20/400</option>
+                                            <option value="CLD">CLD</option><option value="VBLM">VBLM</option>
+                                            <option value="PL+">PL+</option><option value="PL-">PL-</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">AV OS <span class="optional">(opt.)</span></label>
+                                        <select class="form-control patient-field" data-field="av_os">
+                                            <option value="">--</option>
+                                            <option value="20/20">20/20</option><option value="20/25">20/25</option>
+                                            <option value="20/30">20/30</option><option value="20/40">20/40</option>
+                                            <option value="20/50">20/50</option><option value="20/60">20/60</option>
+                                            <option value="20/80">20/80</option><option value="20/100">20/100</option>
+                                            <option value="20/200">20/200</option><option value="20/400">20/400</option>
+                                            <option value="CLD">CLD</option><option value="VBLM">VBLM</option>
+                                            <option value="PL+">PL+</option><option value="PL-">PL-</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">AV bino <span class="optional">(opt.)</span></label>
+                                        <select class="form-control patient-field" data-field="av_bi">
+                                            <option value="">--</option>
+                                            <option value="20/20">20/20</option><option value="20/25">20/25</option>
+                                            <option value="20/30">20/30</option><option value="20/40">20/40</option>
+                                            <option value="20/50">20/50</option><option value="20/60">20/60</option>
+                                            <option value="20/80">20/80</option><option value="20/100">20/100</option>
+                                            <option value="20/200">20/200</option><option value="20/400">20/400</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row" style="margin-top:10px;">
+                                    <div class="form-group">
+                                        <label class="form-label">PIO OD (mmHg) <span class="optional">(opt.)</span></label>
+                                        <select class="form-control patient-field" data-field="pio_od">
+                                            <option value="">--</option>
+                                            <option value="8">8</option><option value="10">10</option><option value="12">12</option>
+                                            <option value="14">14</option><option value="15">15</option><option value="16">16</option>
+                                            <option value="18">18</option><option value="20">20</option><option value="22">22</option>
+                                            <option value="24">24</option><option value="26">26</option><option value="28">28</option>
+                                            <option value="30">30</option><option value="35">35</option><option value="40">40</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">PIO OS (mmHg) <span class="optional">(opt.)</span></label>
+                                        <select class="form-control patient-field" data-field="pio_os">
+                                            <option value="">--</option>
+                                            <option value="8">8</option><option value="10">10</option><option value="12">12</option>
+                                            <option value="14">14</option><option value="15">15</option><option value="16">16</option>
+                                            <option value="18">18</option><option value="20">20</option><option value="22">22</option>
+                                            <option value="24">24</option><option value="26">26</option><option value="28">28</option>
+                                            <option value="30">30</option><option value="35">35</option><option value="40">40</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ant&eacute;c&eacute;dents -->
+                            <div class="patient-section">
+                                <div class="patient-section-title">&#128203; Ant&eacute;c&eacute;dents</div>
+                                <div class="form-group">
+                                    <label class="form-label">Ant&eacute;c&eacute;dents g&eacute;n&eacute;raux <span class="optional">(opt.)</span></label>
+                                    <select class="form-control patient-field" data-field="atcd_general" multiple style="min-height:60px;">
+                                        <option value="hta">HTA</option>
+                                        <option value="diabete">Diab&egrave;te</option>
+                                        <option value="dyslipidemia">Dyslipid&eacute;mie</option>
+                                        <option value="cardio">Pathologie cardiovasculaire</option>
+                                        <option value="renal">Insuffisance r&eacute;nale</option>
+                                        <option value="anticoag">Anticoagulants</option>
+                                        <option value="antiagreg">Antiplaquettaires</option>
+                                    </select>
+                                    <p class="form-hint">Ctrl+clic pour s&eacute;lection multiple</p>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">ATCD ophtalmologiques <span class="optional">(opt.)</span></label>
+                                    <select class="form-control patient-field" data-field="atcd_ophtalmo" multiple style="min-height:60px;">
+                                        <option value="cataracte_op">Cataracte op&eacute;r&eacute;e</option>
+                                        <option value="glaucome">Glaucome</option>
+                                        <option value="dr">R&eacute;tinopathie diab&eacute;tique</option>
+                                        <option value="laser">Laser r&eacute;tinien</option>
+                                        <option value="vitrectomie">Vitrectomie</option>
+                                        <option value="decollement">D&eacute;collement de r&eacute;tine</option>
+                                        <option value="uveite">Uv&eacute;ite</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Allergies <span class="optional">(opt.)</span></label>
+                                    <input type="text" class="form-control patient-field" data-field="allergies" placeholder="Aucune connue">
+                                </div>
+                            </div>
+
+                            <!-- Notes -->
+                            <div class="form-group">
+                                <label class="form-label">Notes libres <span class="optional">(opt.)</span></label>
+                                <textarea class="form-control patient-field" data-field="notes" rows="2" placeholder="Remarques g&eacute;n&eacute;rales..."></textarea>
+                            </div>
+
+                            <!-- Visites -->
+                            <div class="patient-section">
+                                <div class="patient-section-title">&#128197; Historique des visites</div>
+                                <div id="patient-visits-list" style="display:none;">
+                                    <div id="patient-visits-content" class="visits-timeline"></div>
+                                </div>
+                                <div id="patient-visits-empty" style="text-align:center;padding:16px;color:var(--text-muted);font-size:0.78rem;">
+                                    Aucune visite enregistr&eacute;e
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- ================= DISCLAIMER (visible sur tous les onglets) ================= -->
-            <section class="disclaimer">
+        <!-- ============================== TAB: EXAMEN CLINIQUE ============================== -->
+        <div id="tab-exam" class="tab-panel" role="tabpanel">
+            <div class="page-title">
+                <div class="page-title-icon rose">&#128065;</div>
+                <div>
+                    <h2>Examen Clinique</h2>
+                    <p>Lampe &agrave; fente (LAF) &amp; Fond d'oeil (FO)</p>
+                </div>
+            </div>
+
+            <!-- S&eacute;lection patient -->
+            <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;flex-shrink:0;">
+                <div class="form-group" style="margin:0;min-width:200px;">
+                    <label class="form-label">Patient <span class="required">*</span></label>
+                    <select id="exam-patient" class="form-control">
+                        <option value="">-- S&eacute;lectionner un patient --</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin:0;min-width:120px;">
+                    <label class="form-label">Oeil <span class="required">*</span></label>
+                    <select id="exam-eye" class="form-control">
+                        <option value="OD">OD (Droit)</option>
+                        <option value="OS">OS (Gauche)</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin:0;min-width:140px;">
+                    <label class="form-label">Date <span class="required">*</span></label>
+                    <input type="date" id="exam-date" class="form-control">
+                </div>
+            </div>
+
+            <div class="grid-2" style="align-items:start;">
+                <!-- LAF -->
                 <div class="card">
-                    <div class="card__header">
-                        <h3 data-i18n="disclaimer.title">Avertissement légal</h3>
+                    <div class="card-header" style="background:var(--rose-50);">
+                        <h3 style="color:var(--rose-dark);"><span class="dot dot-rose"></span> LAF - Lampe &agrave; fente</h3>
                     </div>
-                    <div class="card__body">
-                        <div class="disclaimer-content">
-                            <p data-i18n="disclaimer.content1">
-                                Ce site ne remplace pas le jugement clinique du médecin. Les recommandations
-                                présentées sont indicatives et doivent être adaptées à chaque patient.
-                            </p>
-                            <p data-i18n="disclaimer.content2">
-                                L'utilisation de médicaments hors AMM (Autorisation de Mise sur le Marché)
-                                relève de la responsabilité du prescripteur selon l'article L.5121-12-1 du CSP.
-                            </p>
-                            <p data-i18n="disclaimer.content3">
-                                Les intervalles d'injection doivent être ajustés selon la réponse thérapeutique
-                                et l'état clinique du patient.
-                            </p>
+                    <div class="card-body">
+                        <!-- Corn&eacute;e -->
+                        <div class="exam-section">
+                            <div class="exam-section-title laf"><span class="icon">&#9711;</span> Corn&eacute;e</div>
+                            <div class="exam-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Transparence</label>
+                                    <select class="form-control exam-field" data-field="cornee_transparence">
+                                        <option value="claire">Claire</option>
+                                        <option value="oedeme">Oed&egrave;me</option>
+                                        <option value="opacite">Opacit&eacute;</option>
+                                        <option value="precipites">Pr&eacute;cipit&eacute;s r&eacute;trod&eacute;scem&eacute;tiques</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Fluoresc&eacute;ine</label>
+                                    <select class="form-control exam-field" data-field="cornee_fluo">
+                                        <option value="negative">N&eacute;gative</option>
+                                        <option value="kps">KPS (k&eacute;ratite ponctu&eacute;e)</option>
+                                        <option value="ulcere">Ulc&egrave;re</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chambre ant&eacute;rieure -->
+                        <div class="exam-section">
+                            <div class="exam-section-title laf"><span class="icon">&#128311;</span> Chambre ant&eacute;rieure</div>
+                            <div class="exam-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Tyndall</label>
+                                    <select class="form-control exam-field" data-field="ca_tyndall">
+                                        <option value="0">0 (Absent)</option>
+                                        <option value="0.5">0.5+</option>
+                                        <option value="1">1+</option>
+                                        <option value="2">2+</option>
+                                        <option value="3">3+</option>
+                                        <option value="4">4+</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Profondeur</label>
+                                    <select class="form-control exam-field" data-field="ca_profondeur">
+                                        <option value="normale">Normale</option>
+                                        <option value="etroite">Etroite</option>
+                                        <option value="plate">Plate</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Hypopion</label>
+                                    <select class="form-control exam-field" data-field="ca_hypopion">
+                                        <option value="absent">Absent</option>
+                                        <option value="present">Pr&eacute;sent</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Hyphema</label>
+                                    <select class="form-control exam-field" data-field="ca_hyphema">
+                                        <option value="absent">Absent</option>
+                                        <option value="present">Pr&eacute;sent</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Iris -->
+                        <div class="exam-section">
+                            <div class="exam-section-title laf"><span class="icon">&#127912;</span> Iris</div>
+                            <div class="exam-grid">
+                                <div class="form-group">
+                                    <label class="form-label">&Eacute;tat</label>
+                                    <select class="form-control exam-field" data-field="iris_etat">
+                                        <option value="normal">Normal</option>
+                                        <option value="rubéose">Rub&eacute;ose irienne</option>
+                                        <option value="atrophie">Atrophie</option>
+                                        <option value="synechies">Syn&eacute;chies</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Pupille</label>
+                                    <select class="form-control exam-field" data-field="iris_pupille">
+                                        <option value="reactive">R&eacute;active</option>
+                                        <option value="myosis">Myosis</option>
+                                        <option value="mydriase">Mydriase</option>
+                                        <option value="dpa">DPA (Marcus Gunn)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cristallin -->
+                        <div class="exam-section">
+                            <div class="exam-section-title laf"><span class="icon">&#128308;</span> Cristallin / ICP</div>
+                            <div class="exam-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Statut</label>
+                                    <select class="form-control exam-field" data-field="cristallin_statut">
+                                        <option value="clair">Clair</option>
+                                        <option value="cataracte_debutante">Cataracte d&eacute;butante</option>
+                                        <option value="cataracte_moderee">Cataracte mod&eacute;r&eacute;e</option>
+                                        <option value="cataracte_dense">Cataracte dense</option>
+                                        <option value="pseudophaque">Pseudophaque (ICP)</option>
+                                        <option value="aphaque">Aphaque</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Type cataracte <span class="optional">(opt.)</span></label>
+                                    <select class="form-control exam-field" data-field="cristallin_type">
+                                        <option value="">--</option>
+                                        <option value="nucleaire">Nucl&eacute;aire</option>
+                                        <option value="corticale">Corticale</option>
+                                        <option value="sous_capsulaire">Sous-capsulaire post&eacute;rieure</option>
+                                        <option value="mixte">Mixte</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Vitr&eacute; -->
+                        <div class="exam-section">
+                            <div class="exam-section-title laf"><span class="icon">&#9898;</span> Vitr&eacute; ant&eacute;rieur</div>
+                            <div class="form-group">
+                                <label class="form-label">&Eacute;tat</label>
+                                <select class="form-control exam-field" data-field="vitre_ant">
+                                    <option value="clair">Clair</option>
+                                    <option value="cellules">Cellules vitr&eacute;ennes</option>
+                                    <option value="hyalite">Hyalite</option>
+                                    <option value="hemovitre">H&eacute;movitr&eacute;</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </section>
-        </main>
 
-        <footer class="footer">
-            <div class="container">
-                <p>&copy; 2025 EasIVT - Outil professionnel pour ophtalmologues</p>
+                <!-- FO -->
+                <div class="card">
+                    <div class="card-header" style="background:var(--purple-50);">
+                        <h3 style="color:var(--purple-dark);"><span class="dot dot-purple"></span> FO - Fond d'oeil</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Papille -->
+                        <div class="exam-section">
+                            <div class="exam-section-title fo"><span class="icon">&#128992;</span> Papille</div>
+                            <div class="exam-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Aspect</label>
+                                    <select class="form-control exam-field" data-field="papille_aspect">
+                                        <option value="normale">Normale</option>
+                                        <option value="pale">P&acirc;le</option>
+                                        <option value="excavee">Excav&eacute;e</option>
+                                        <option value="oedeme">Oed&egrave;me papillaire</option>
+                                        <option value="neovasc">N&eacute;ovaisseaux pr&eacute;papillaires</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">C/D ratio <span class="optional">(opt.)</span></label>
+                                    <select class="form-control exam-field" data-field="papille_cd">
+                                        <option value="">--</option>
+                                        <option value="0.1">0.1</option><option value="0.2">0.2</option>
+                                        <option value="0.3">0.3</option><option value="0.4">0.4</option>
+                                        <option value="0.5">0.5</option><option value="0.6">0.6</option>
+                                        <option value="0.7">0.7</option><option value="0.8">0.8</option>
+                                        <option value="0.9">0.9</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Macula -->
+                        <div class="exam-section">
+                            <div class="exam-section-title fo"><span class="icon">&#128308;</span> Macula</div>
+                            <div class="exam-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Aspect</label>
+                                    <select class="form-control exam-field" data-field="macula_aspect">
+                                        <option value="normale">Normale</option>
+                                        <option value="oedeme">Oed&egrave;me maculaire</option>
+                                        <option value="exsudats">Exsudats</option>
+                                        <option value="hemorragie">H&eacute;morragie</option>
+                                        <option value="atrophie">Atrophie</option>
+                                        <option value="membrane">Membrane &eacute;pir&eacute;tinienne</option>
+                                        <option value="trou">Trou maculaire</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Reflet fov&eacute;olaire</label>
+                                    <select class="form-control exam-field" data-field="macula_reflet">
+                                        <option value="present">Pr&eacute;sent</option>
+                                        <option value="absent">Absent</option>
+                                        <option value="diminue">Diminu&eacute;</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">DSR clinique</label>
+                                    <select class="form-control exam-field" data-field="macula_dsr">
+                                        <option value="absent">Absent</option>
+                                        <option value="present">Pr&eacute;sent</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">H&eacute;morragies</label>
+                                    <select class="form-control exam-field" data-field="macula_hemorragies">
+                                        <option value="absentes">Absentes</option>
+                                        <option value="rares">Rares</option>
+                                        <option value="moderees">Mod&eacute;r&eacute;es</option>
+                                        <option value="nombreuses">Nombreuses</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Vaisseaux -->
+                        <div class="exam-section">
+                            <div class="exam-section-title fo"><span class="icon">&#128310;</span> Vaisseaux</div>
+                            <div class="exam-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Art&egrave;res</label>
+                                    <select class="form-control exam-field" data-field="vaisseaux_arteres">
+                                        <option value="normales">Normales</option>
+                                        <option value="retrecies">R&eacute;tr&eacute;cies</option>
+                                        <option value="engainees">Engain&eacute;es</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Veines</label>
+                                    <select class="form-control exam-field" data-field="vaisseaux_veines">
+                                        <option value="normales">Normales</option>
+                                        <option value="dilatees">Dilat&eacute;es / tortueuses</option>
+                                        <option value="engainees">Engain&eacute;es</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- R&eacute;tine p&eacute;riph&eacute;rique -->
+                        <div class="exam-section">
+                            <div class="exam-section-title fo"><span class="icon">&#128309;</span> R&eacute;tine p&eacute;riph&eacute;rique</div>
+                            <div class="exam-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Aspect</label>
+                                    <select class="form-control exam-field" data-field="peripherie_aspect">
+                                        <option value="normale">Normale</option>
+                                        <option value="hemorragies">H&eacute;morragies</option>
+                                        <option value="exsudats_cotonneux">Exsudats cotonneux</option>
+                                        <option value="neovasc">N&eacute;ovaisseaux</option>
+                                        <option value="degenerescence">D&eacute;g&eacute;n&eacute;rescence palissadique</option>
+                                        <option value="dechirure">D&eacute;chirure</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Laser ant&eacute;rieur</label>
+                                    <select class="form-control exam-field" data-field="peripherie_laser">
+                                        <option value="non">Non</option>
+                                        <option value="ppr">PPR (panphotocoa.)</option>
+                                        <option value="focal">Focal / grille</option>
+                                        <option value="barrage">Barrage</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notes FO -->
+                        <div class="form-group" style="margin-top:10px;">
+                            <label class="form-label">Notes FO <span class="optional">(opt.)</span></label>
+                            <textarea class="form-control exam-field" data-field="fo_notes" rows="2" placeholder="Observations compl&eacute;mentaires..."></textarea>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </footer>
-    </div>
+
+            <!-- Actions -->
+            <div style="display:flex;gap:12px;margin-top:16px;flex-shrink:0;">
+                <button id="save-exam-btn" class="btn btn--rose">Sauvegarder l'examen</button>
+                <button id="exam-history-btn" class="btn btn--outline">Voir historique examens</button>
+            </div>
+        </div>
+
+        <!-- ============================== TAB: MEDICAMENTS ============================== -->
+        <div id="tab-medications" class="tab-panel" role="tabpanel">
+            <div class="page-title">
+                <div class="page-title-icon emerald">&#128138;</div>
+                <div>
+                    <h2 data-i18n="medications.hero_title">Base de donn&eacute;es M&eacute;dicaments IVT</h2>
+                    <p data-i18n="medications.hero_subtitle">R&eacute;f&eacute;rence des mol&eacute;cules disponibles</p>
+                </div>
+            </div>
+
+            <div style="flex:1;overflow-y:auto;">
+                <h3 style="font-size:0.95rem;color:var(--emerald-dark);margin-bottom:12px;" data-i18n="medications.anti_vegf">Anti-VEGF</h3>
+                <div id="anti-vegf-list" class="med-grid"></div>
+
+                <h3 style="font-size:0.95rem;color:var(--emerald-dark);margin:20px 0 12px;" data-i18n="medications.corticoids">Cortico&iuml;des</h3>
+                <div id="corticoids-list" class="med-grid"></div>
+            </div>
+        </div>
+
+    </div><!-- /main-content -->
 
     <script src="app.js"></script>
 </body>
